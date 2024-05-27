@@ -7,7 +7,6 @@ import ITStaff from "./components/ITStaff/ITStaff";
 const StaffDashboard = () => {
   return (
     <Fragment>
-      
       <Navbar />
       <div className="flex space-x-20 pl-40 mt-20">
         <Staff />

@@ -8,7 +8,7 @@ const CheckIssueStatus = () => {
   const [showDetails, setShowDetails] = useState(false); // State to control whether to show issue details
 
   const handleCheckStatus = async () => {
-    const baseUrl = "http://localhost:5600/api";
+    const baseUrl = "https://https-github-com-melbatestgithub-issue.onrender.com/api";
     try {
       const res = await axios.get(`${baseUrl}/issue/singleIssue/${issueId}`);
       if (res.data.success) {

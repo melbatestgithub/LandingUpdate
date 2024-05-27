@@ -10,7 +10,7 @@ const Profile = () => {
     // Fetch the latest user data from the backend and update local storage
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:5600/api/users/updateUser/${userFromStorage._id}`);
+        const response = await fetch(`https://https-github-com-melbatestgithub-issue.onrender.com/api/users/updateUser/${userFromStorage._id}`);
         const data = await response.json();
         setUser(data);
         setFormData(data);
@@ -45,7 +45,7 @@ const Profile = () => {
     formDataWithImage.append('gender', formData.gender);
     formDataWithImage.append('profileImage', profileImage);
     try {
-      const response = await fetch(`http://localhost:5600/api/users/updateUser/${userFromStorage._id}`, {
+      const response = await fetch(`https://https-github-com-melbatestgithub-issue.onrender.com/api/users/updateUser/${userFromStorage._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

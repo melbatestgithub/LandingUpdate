@@ -10,7 +10,7 @@ const SendFeedback = () => {
     email: "",
     message: "",
   });
-  const baseUrl = "http://localhost:5600/api";
+  const baseUrl = "https://https-github-com-melbatestgithub-issue.onrender.com/api";
 
   const handleChange = (e) => {
     setFeedback({ ...feedback, [e.target.name]: e.target.value });

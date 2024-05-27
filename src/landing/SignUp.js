@@ -12,7 +12,7 @@ import {
 import app from "../firebase";
 
 const SignUp = () => {
-  const baseUrl = "http://localhost:5600/api";
+  const baseUrl = "https://https-github-com-melbatestgithub-issue.onrender.com/api";
   const [userData, setUserData] = useState({
     email: "",
     password: "",
