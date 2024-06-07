@@ -21,7 +21,7 @@ const Chat = () => {
     try {
       const res = await axios.get(`${baseUrl}/conversations/${user._id}`);
       setConversations(res.data);
-      console.log(res.data);
+     
     } catch (error) {
       console.error("Error fetching conversations:", error);
     }
@@ -43,7 +43,7 @@ const Chat = () => {
         })
       );
       setUsers(friendsData);
-      console.log(friendsData);
+      
     } catch (error) {
       console.error("Error fetching friend data:", error);
     }
