@@ -1,20 +1,23 @@
-import React from 'react'
-import './message.css'
-const Message = ({own}) => {
-  return (
-    <div className={own? "message own":"message" }  >
-    <div className='flex gap-4 items-center px-4'>
-      <div className='w-10 h-10 flex-shrink-0'> 
-        <img src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' className='rounded-full object-cover w-full h-full' />
-      </div> 
-      <p className='bg-[#0b5394] px-4 rounded-xl text-white message-txt'>hello what can I help you </p>
-    </div>
-    <div className='m-2'>
-      <span className='font-semibold'>1 hour ago</span>
-    </div>
-  </div>
-  
-  )
-}
+import React from 'react';
+import './message.css';
 
-export default Message
+const Message = ({ own, text }) => {
+    return (
+        <div className={own ? 'message own' : 'message'}>
+            <div className="flex gap-4 items-center px-4">
+                <div className="w-10 h-10 flex-shrink-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        className="rounded-full object-cover w-full h-full"
+                    />
+                </div>
+                <p className="bg-[#0b5394] px-4 rounded-xl text-white message-txt">{text}</p>
+            </div>
+            <div className="m-2">
+                <span className="font-semibold">1 hour ago</span>
+            </div>
+        </div>
+    );
+};
+
+export default Message;
