@@ -9,7 +9,6 @@ const Chat = () => {
   const user = storedUser ? JSON.parse(storedUser).others : null;
   const [conversations, setConversations] = useState([]);
   const [users, setUsers] = useState([]);
-
   const baseUrl = "http://localhost:5600/api";
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const Chat = () => {
     <div className="full_container w-full">
       <div className="UserList">
         {conversations.map(c=>(
-          <Conversation/>
+          <Conversation conversation={c} currentUser={user}/>
         ))}
       </div>
       <div className="chatBox w-full h-screen">
