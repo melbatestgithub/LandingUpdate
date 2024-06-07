@@ -38,8 +38,8 @@ const Chat = () => {
       const friendsData = await Promise.all(
         conversations.map(async (conversation) => {
           const friendId = conversation.members.find(m => m !== user._id);
-          const res = await axios.get(`${baseUrl}/users/getAll/${friendId}`);
-          return res.data;
+          // const res = await axios.get(`${baseUrl}/users/getAll/${friendId}`);
+          // return res.data;
         })
       );
       setUsers(friendsData);
