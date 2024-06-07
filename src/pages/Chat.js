@@ -8,7 +8,8 @@ const Chat = () => {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser).others : null;
   const [conversations, setConversations] = useState([]);
-  const [users, setUsers] = useState([]);
+const [currentChat,setCurrentChat]=useState([])
+const [message,setMessage]=useState([])
   const baseUrl = "http://localhost:5600/api";
 
   useEffect(() => {
@@ -27,27 +28,9 @@ const Chat = () => {
     }
   };
 
-  useEffect(() => {
-    if (conversations.length > 0) {
-      fetchFriendsData();
-    }
-  }, [conversations]);
 
-  const fetchFriendsData = async () => {
-    try {
-      const friendsData = await Promise.all(
-        conversations.map(async (conversation) => {
-          const friendId = conversation.members.find(m => m !== user._id);
-          // const res = await axios.get(`${baseUrl}/users/getAll/${friendId}`);
-          // return res.data;
-        })
-      );
-      setUsers(friendsData);
-      
-    } catch (error) {
-      console.error("Error fetching friend data:", error);
-    }
-  };
+
+
 
   return (
     <div className="full_container w-full">
