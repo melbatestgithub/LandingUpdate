@@ -1,7 +1,8 @@
 import React from 'react';
 import './message.css';
-
-const Message = ({ own, text }) => {
+import {format} from 'timeago.js'
+const Message = ({ message,own,  }) => {
+   
     return (
         <div className={own ? 'message own' : 'message'}>
             <div className="flex gap-4 items-center px-4">
@@ -11,10 +12,10 @@ const Message = ({ own, text }) => {
                         className="rounded-full object-cover w-full h-full"
                     />
                 </div>
-                <p className="bg-[#0b5394] px-4 rounded-xl text-white message-txt">{text}</p>
+                <p className="bg-[#0b5394] px-4 rounded-xl text-white message-txt">{message.message}</p>
             </div>
             <div className="m-2">
-                <span className="font-semibold">1 hour ago</span>
+                <span className="font-semibold">{format(message.createdAt)}</span>
             </div>
         </div>
     );

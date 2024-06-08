@@ -8,8 +8,10 @@ const Chat = () => {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser).others : null;
   const [conversations, setConversations] = useState([]);
-const [currentChat,setCurrentChat]=useState([])
+const [currentChat,setCurrentChat]=useState(null)
 const [message,setMessage]=useState([])
+const [newMessage,setNewMessage]=useState([])
+
   const baseUrl = "http://localhost:5600/api";
 
   useEffect(() => {
@@ -28,29 +30,68 @@ const [message,setMessage]=useState([])
     }
   };
 
+  useEffect(()=>{
+const getMessage=async()=>{
+try {
+  const res=await axios.get(`${baseUrl}/messages/${currentChat._id}`)
+  setMessage(res.data)
+  
+} catch (error) {
+  console.log(error)
+}
+}
+
+getMessage()
+  },[currentChat])
 
 
-
+const handleSubmit=async(e)=>{
+  e.preventDefault()
+  const message={
+    sender:user._id,
+    message:newMessage,
+    conversationId:currentChat._id
+  }
+  try {
+    const res=await axios.post(`${baseUrl}/messages`,message)
+    setNewMessage([...message,res.data])
+    setNewMessage("")
+    
+  } catch (error) {
+    
+  }
+ 
+}
 
   return (
     <div className="full_container w-full">
       <div className="UserList">
         {conversations.map(c=>(
+        <div className onClick={()=>setCurrentChat(c)}>
           <Conversation conversation={c} currentUser={user}/>
+        </div>
         ))}
+      
       </div>
       <div className="chatBox w-full h-screen">
         <div className="chatBox-wrapper">
+          {
+            currentChat?<> 
+          
           <div className=" ">
-            <Message />
-            <Message own={true} />
-            <Message />
+            {message.map(m=>(
+            <Message message={m} own={m.sender===user._id} />
+            ))}
+            
             {/* Add more <Message /> components as needed */}
           </div>
           <div className="flex mt-3 justify-between p-3 items-center">
-            <textarea className="w-[80%] h-[90px] p-3 border border-gray-300 focus:outline-none rounded-md focus:border-blue-400" placeholder="write something..."></textarea>
-            <button className="bg-slate-800 px-3 py-2 text-white rounded-lg">Send</button>
+            <textarea className="w-[80%] h-[90px] p-3 border border-gray-300 focus:outline-none rounded-md focus:border-blue-400" placeholder="write something..." onChange={(e)=>setNewMessage(e.target.value)} value={newMessage}></textarea>
+            <button className="bg-slate-800 px-3 py-2 text-white rounded-lg" onClick={handleSubmit}>Send</button>
           </div>
+          </>:<span className="empty-chat">Open a conversation to start</span>
+         }
+
         </div>
       </div>
     </div>

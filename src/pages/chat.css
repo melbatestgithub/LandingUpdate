@@ -40,3 +40,16 @@ justify-content: center;
 .chatBox{
 box-shadow: 0 0 4px;
 }
+.empty-chat{
+ text-align: center;
+ margin: 2rem 1rem;
+ font-size: 1.5rem;
+ font-weight: 700;
+ background: rgb(235, 226, 226);
+ padding: .5rem 1rem;
+  
+}
+.chatBox-wrapper{
+padding: 2rem;
+position: relative;
+}
