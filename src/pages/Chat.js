@@ -3,17 +3,46 @@ import Message from "../components/messages/Message";
 import { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import Conversation from "../components/conversation/Conversation";
+import { io } from "socket.io-client";
 
 const Chat = () => {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser).others : null;
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [message, setMessage] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const socket = useRef();
   const [newMessage, setNewMessage] = useState("");
   const scrollRef = useRef();
-
   const baseUrl = "http://localhost:5600/api";
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:5800");
+    socket.current.on("getMessage", (data) => {
+      console.log("Message received from socket:", data);
+      setArrivalMessage({
+        sender: data.senderId,
+        message: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (arrivalMessage && currentChat?.members.includes(arrivalMessage.sender)) {
+      setMessages((prev) => [...prev, arrivalMessage]);
+    }
+  }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {
+    if (user?._id) {
+      socket.current.emit("addUser", user._id);
+      socket.current.on("getUsers", (users) => {
+        console.log("Connected users:", users);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user && user._id) {
@@ -31,17 +60,17 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    const getMessage = async () => {
+    const getMessages = async () => {
       try {
         const res = await axios.get(`${baseUrl}/messages/${currentChat._id}`);
-        setMessage(res.data);
+        setMessages(res.data);
       } catch (error) {
-        console.log(error);
+        console.log("Error fetching messages:", error);
       }
     };
 
     if (currentChat) {
-      getMessage();
+      getMessages();
     }
   }, [currentChat]);
 
@@ -52,18 +81,32 @@ const Chat = () => {
       message: newMessage,
       conversationId: currentChat._id,
     };
+
+    const receiverId = currentChat.members.find((member) => member !== user._id);
+    console.log("Sending message:", {
+      senderId: user._id,
+      receiverId,
+      text: newMessage,
+    });
+
+    socket.current.emit("sendMessage", {
+      senderId: user._id,
+      receiverId,
+      text: newMessage,
+    });
+
     try {
       const res = await axios.post(`${baseUrl}/messages`, messageObj);
-      setMessage((prevMessages) => [...prevMessages, res.data]);
+      setMessages((prevMessages) => [...prevMessages, res.data]);
       setNewMessage("");
     } catch (error) {
-      console.log(error);
+      console.log("Error sending message:", error);
     }
   };
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [message]);
+  }, [messages]);
 
   return (
     <div className="full_container w-full">
@@ -80,7 +123,7 @@ const Chat = () => {
             <>
               <div>
                 <div>
-                  {message.map((m) => (
+                  {messages.map((m) => (
                     <div key={m._id} ref={scrollRef}>
                       <Message message={m} own={m.sender === user._id} />
                     </div>

@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Upload from "../assets/upload.jpg";
 import axios from "axios";
-
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
 
 const SignUp = () => {
@@ -28,80 +22,15 @@ const SignUp = () => {
     gender: "",
   });
 
-  const startUpload = (file, fileSize) => {
-    const fileName = new Date().getTime() + file.name;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file, {
-      size: fileSize,
-    });
-
-    handleUploadTask(uploadTask);
-  };
-
-  const handleUploadTask = (uploadTask) => {
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (error) => {
-        console.error("Error occurred during upload:", error);
-      },
-      () => {
-        // Handle successful uploads on complete
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setUserData({ ...userData, profile: downloadURL });
-          console.log("File uploaded successfully. Download URL:", downloadURL);
-        });
-      }
-    );
-  };
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
+  const [errors, setErrors] = useState({});
+  const [selectedFile, setSelectedFile] = useState(null);
   const [selectGender, setSelectGender] = useState("");
-  const handleChangeGender = (e) => {
-    setSelectGender(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("btn clicked");
-    try {
-      const userDataWithGender = { ...userData, gender: selectGender };
-      const res = await axios.post(
-        `${baseUrl}/users/register`,
-        userDataWithGender
-      );
-
-      startUpload(selectedFile, selectedFile.size);
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 15000);
-    } catch (error) {
-      console.log("unable to fetch user data", error);
-    }
-  };
-
   const [department, setDepartment] = useState([]);
 
   useEffect(() => {
     fetch(`${baseUrl}/department/getAll`)
       .then((response) => response.json())
       .then((data) => {
-        // Debugging statement
         setDepartment(data.departments);
       })
       .catch((error) => {
@@ -109,7 +38,80 @@ const SignUp = () => {
       });
   }, []);
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  const validateEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
+  };
+
+  const validateString = (input) => {
+    return /^[a-zA-Z\s]+$/.test(input);
+  };
+
+  const validateNumber = (input) => {
+    return /^\d+$/.test(input);
+  };
+
+  const validateField = (name, value) => {
+    let errorMsg = "";
+
+    switch (name) {
+      case "email":
+        if (!validateEmail(value)) {
+          errorMsg = "Invalid email format";
+        }
+        break;
+      case "password":
+        if (!validatePassword(value)) {
+          errorMsg = "Password must be a combination of letters and numbers";
+        }
+        break;
+      case "firstName":
+        if (!validateString(value)) {
+          errorMsg = "First name must be a string";
+        }
+        break;
+      case "lastName":
+        if (!validateString(value)) {
+          errorMsg = "Last name must be a string";
+        }
+        break;
+      case "address":
+        if (!validateString(value)) {
+          errorMsg = "Address must be a string";
+        }
+        break;
+      case "phoneNumber":
+        if (!validateNumber(value)) {
+          errorMsg = "Phone number must be numeric";
+        }
+        break;
+      case "emergencyContact":
+        if (!validateNumber(value)) {
+          errorMsg = "Emergency contact must be numeric";
+        }
+        break;
+      default:
+        break;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMsg,
+    }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+    validateField(name, value);
+  };
+
+  const handleChangeGender = (e) => {
+    setSelectGender(e.target.value);
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -118,115 +120,162 @@ const SignUp = () => {
     console.log(file);
   };
 
+  const startUpload = (file, fileSize) => {
+    const storage = getStorage(app);
+    const storageRef = ref(storage, `profiles/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+      },
+      (error) => {
+        console.error("File upload error:", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setUserData((prevUserData) => ({ ...prevUserData, profile: downloadURL }));
+        });
+      }
+    );
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const isValid = Object.values(errors).every((error) => !error) && 
+                    Object.values(userData).every((value) => value !== "");
+    
+    if (isValid) {
+      console.log("Form is valid, submitting...");
+      try {
+        const userDataWithGender = { ...userData, gender: selectGender };
+        const res = await axios.post(
+          `${baseUrl}/users/register`,
+          userDataWithGender
+        );
+
+        if (selectedFile) {
+          startUpload(selectedFile, selectedFile.size);
+        }
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 15000);
+      } catch (error) {
+        console.log("Unable to fetch user data", error);
+      }
+    } else {
+      console.log("Form is invalid, please correct the errors and try again.");
+    }
+  };
+
   return (
-    <div className="flex justify-center  shadow-lg h-screen  bg-gray-100  ">
-      <div className="bg-white shadow-md rounded-md p-3 mt-2 ">
-        <h2 className="text-2xl  font-bold text-center">Sign Up</h2>
+    <div className="flex justify-center shadow-lg h-screen bg-gray-100">
+      <div className="bg-white shadow-md rounded-md p-3 mt-2">
+        <h2 className="text-2xl font-bold text-center">Sign Up</h2>
         <form onSubmit={handleSubmit}>
-          <div className=" flex flex-col  items-start justify-start p-3">
+          <div className="flex flex-col items-start justify-start p-3">
             <div className="flex justify-around gap-5">
               <div className="flex flex-col">
-                <label className=" text-gray-700 text-sm font-bold mb-2 capitalize">
-                  email address
+                <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
+                  Email Address
                 </label>
                 <input
                   type="text"
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="email"
                   onChange={handleChange}
                   value={userData.email}
                 />
+                {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
               </div>
 
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
-                  password
+                  Password
                 </label>
                 <input
                   type="password"
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="password"
                   onChange={handleChange}
                   value={userData.password}
                 />
+                {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
               </div>
             </div>
 
             <div className="flex justify-around gap-5">
               <div className="flex flex-col">
-                <label className=" text-gray-700 text-sm font-bold mb-2 capitalize">
-                  firstName
+                <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
+                  First Name
                 </label>
                 <input
                   type="text"
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="firstName"
                   onChange={handleChange}
                   value={userData.firstName}
                 />
+                {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName}</p>}
               </div>
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
-                  lastName
+                  Last Name
                 </label>
                 <input
                   type="text"
                   onChange={handleChange}
                   value={userData.lastName}
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="lastName"
                 />
+                {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName}</p>}
               </div>
             </div>
 
             <div className="flex justify-around gap-5">
               <div className="flex flex-col">
-                <label className=" text-gray-700 text-sm font-bold mb-2 capitalize">
-                  phoneNumber
+                <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
+                  Phone Number
                 </label>
                 <input
-                  type="phone"
+                  type="text"
                   onChange={handleChange}
                   value={userData.phoneNumber}
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="phoneNumber"
                 />
+                {errors.phoneNumber && <p className="text-red-500 text-xs">{errors.phoneNumber}</p>}
               </div>
 
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
-                  address
+                  Address
                 </label>
                 <input
                   type="text"
                   onChange={handleChange}
                   value={userData.address}
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="address"
                 />
+                {errors.address && <p className="text-red-500 text-xs">{errors.address}</p>}
               </div>
             </div>
 
             <div className="flex justify-around gap-5">
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
-                  confirm password
+                  Department
                 </label>
-                <input
-                  type="password"
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  name="confirmPassword"
-                  onChange={handleChange}
-                  value={userData.confirmPassword}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label>Department</label>
                 <select
                   name="department"
                   value={userData.department}
                   onChange={handleChange}
-                  className="shadow  border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   {department.map((dept) => (
                     <option key={dept._id} value={dept.name}>
@@ -243,12 +292,13 @@ const SignUp = () => {
                   Emergency Contact
                 </label>
                 <input
-                  type="phone"
+                  type="text"
                   onChange={handleChange}
                   value={userData.emergencyContact}
-                  className="shadow appearance-none border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="emergencyContact"
                 />
+                {errors.emergencyContact && <p className="text-red-500 text-xs">{errors.emergencyContact}</p>}
               </div>
               <div className="flex flex-col">
                 <label>Employment Type</label>
@@ -256,23 +306,23 @@ const SignUp = () => {
                   name="employmentType"
                   onChange={handleChange}
                   value={userData.employmentType}
-                  className="shadow  border   py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option>Full time</option>
                   <option>Regular</option>
-                  <option>Partime</option>
+                  <option>Part time</option>
                 </select>
               </div>
             </div>
             <div></div>
             <div className="flex space-x-6 justify-center items-center">
               <label htmlFor="upload">
-                <div className=" flex gap-6 mt-2 pt-2 items-center ">
+                <div className="flex gap-6 mt-2 pt-2 items-center">
                   <span className="cursor-pointer bg-green-300 p-2 text-white">
                     Upload Profile
                   </span>
                   <div
-                    className="relative cursor-pointer bg-white rounded-full   border-2 border-gray-300 flex items-center justify-center"
+                    className="relative cursor-pointer bg-white rounded-full border-2 border-gray-300 flex items-center justify-center"
                     style={{ height: "60px", width: "60px" }}
                   >
                     <img
@@ -297,31 +347,23 @@ const SignUp = () => {
                 <p>Gender</p>
                 <div className="flex justify-center items-center gap-3">
                   <label className="flex items-center gap-2 justify-center">
-                    <span>male</span>
+                    <span>Male</span>
                     <input
                       type="radio"
                       name="gender"
                       value="male"
-                      className=" 
-                        w-7
-                        h-5
-                        cursor-pointer
-                        "
+                      className="w-7 h-5 cursor-pointer"
                       checked={selectGender === "male"}
                       onChange={handleChangeGender}
                     />
                   </label>
                   <label className="flex items-center gap-2 justify-center">
-                    <span>female</span>
+                    <span>Female</span>
                     <input
                       type="radio"
                       name="gender"
                       value="female"
-                      className=" 
-                        w-7
-                        h-5
-                        cursor-pointer
-                        "
+                      className="w-7 h-5 cursor-pointer"
                       checked={selectGender === "female"}
                       onChange={handleChangeGender}
                     />
@@ -330,7 +372,7 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center flex-col ">
+          <div className="flex items-center flex-col">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
               type="submit"
@@ -339,7 +381,7 @@ const SignUp = () => {
             </button>
             <div className="mt-2">
               <p>
-                Already have account?{" "}
+                Already have an account?{" "}
                 <Link to="/login">
                   <span className="text-lg text-slate-500 cursor-pointer">
                     Login

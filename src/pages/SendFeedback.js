@@ -3,6 +3,7 @@ import { FaRegSave } from "react-icons/fa";
 import { MdCancelPresentation } from "react-icons/md";
 import axios from "axios";
 import { useState } from "react";
+
 const SendFeedback = () => {
   const [feedback, setFeedback] = useState({
     employeeFullName: "",
@@ -12,20 +13,55 @@ const SendFeedback = () => {
   });
   const baseUrl = "https://https-github-com-melbatestgithub-issue.onrender.com/api";
 
+  const [errors, setErrors] = useState({
+    employeeFullName: "",
+    department: "",
+    email: "",
+    message: "",
+  }); // State to store validation errors
+
   const handleChange = (e) => {
-    setFeedback({ ...feedback, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let errorMessage = "";
+
+    // Validation for input fields
+    switch (name) {
+      case "employeeFullName":
+      case "department":
+      case "message":
+        if (typeof value !== "string" || value.length <= 3) {
+          errorMessage = "Value must be a string with length greater than 3";
+        }
+        break;
+      case "email":
+        if (!value.includes("@")) {
+          errorMessage = "Email must contain the @ symbol";
+        }
+        break;
+      default:
+        break;
+    }
+
+    // Set the error message for the input field
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMessage,
+    }));
+
+    // Update the feedback state
+    setFeedback({ ...feedback, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // const userId=JSON.parse(localStorage.getItem("user")).others._id
-    const userId=1234
-    console.log(userId)
-    const feedbackData={
+    const userId = 1234;
+    console.log(userId);
+    const feedbackData = {
       ...feedback,
-      userId:userId
-    }
+      userId: userId,
+    };
     try {
       await axios.post(`${baseUrl}/feedback/createFeedback`, feedbackData);
       console.log(feedback);
@@ -54,6 +90,7 @@ const SendFeedback = () => {
               style={{ width: "40%" }}
               className=" mb-2 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
             />
+            {errors.employeeFullName && <p className="text-red-500">{errors.employeeFullName}</p>}
             <label className="mb-2">Employee email</label>
             <input
               type="email"
@@ -64,6 +101,7 @@ const SendFeedback = () => {
               style={{ width: "40%" }}
               className=" mb-2 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
             />
+            {errors.email && <p className="text-red-500">{errors.email}</p>}
             <label className="mb-2">Employee Department</label>
             <input
               type="text"
@@ -74,6 +112,7 @@ const SendFeedback = () => {
               style={{ width: "40%" }}
               className=" mb-2 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
             />
+            {errors.department && <p className="text-red-500">{errors.department}</p>}
             <label>Write message</label>
             <textarea
               type="text"
@@ -84,6 +123,7 @@ const SendFeedback = () => {
               style={{ width: "40%" }}
               className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
             ></textarea>
+            {errors.message && <p className="text-red-500">{errors.message}</p>}
           </div>
           <div className="flex justify-between my-4" style={{ width: "40%" }}>
             <button

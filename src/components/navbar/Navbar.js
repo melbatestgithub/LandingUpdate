@@ -18,7 +18,7 @@ const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user")).others;
   const fullName = `${firstName} ${lastName}`;
 
-  let notificationLink = "/dashboard/notification";
+  let notificationLink = "/dashboard/chatPage";
   let profileLink = "/dashboard/profile";
 
   if (department.includes("IT Staff")) {
