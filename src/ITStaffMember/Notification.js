@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaDownload } from "react-icons/fa";
+import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import AssignedIssuesPDF from "./AssignedIssuesPDF";
 import './notification.css';
 
 const Notification = () => {
@@ -84,12 +86,19 @@ const Notification = () => {
   return (
     <div className="">
       <div className="flex flex-col px-10">
-        <div className="my-2">
-          <button className="bg-black text-white font-bold px-4 py-2 rounded-md flex items-center gap-3 hover:bg-gray-700"> 
-            <FaDownload size={25}/>
-            Download Reports
-          </button>   
-        </div>
+      <div className="my-2">
+  <PDFDownloadLink document={<AssignedIssuesPDF issues={assignedIssues} />} fileName="AssignedIssuesReport.pdf">
+    {({ blob, url, loading, error }) =>
+      loading ? "Loading document..." : (
+        <button className="bg-black text-white font-bold px-4 py-2 rounded-md flex items-center gap-3 hover:bg-gray-700">
+          <FaDownload size={25} />
+          Export
+        </button>
+      )
+    }
+  </PDFDownloadLink>
+</div>
+
         <h3 className="text-center text-xl font-semibold">Assigned Issues</h3>
         {assignedIssues.map((issue, index) => (
           <div
@@ -124,7 +133,7 @@ const Notification = () => {
               </button>
               <button
                 onClick={() => handleDone(issue._id)}
-                className={`py-2 px-6 text-white font-semibold rounded cursor-pointer ${issue.status === "Solved" ? "bg-green-300" : "bg-green-500 hover:bg-green-600"}`}
+                className={`py-2 px-6 text-white font-semibold roundedcursor-pointer ${issue.status === "Solved" ? "bg-green-300" : "bg-green-500 hover:bg-green-600"}`}
                 type="button"
                 disabled={issue.status === "Solved"}
               >
@@ -169,3 +178,4 @@ const Notification = () => {
 };
 
 export default Notification;
+

@@ -6,7 +6,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import app from "../firebase";
 
 const SignUp = () => {
-  const baseUrl = "https://https-github-com-melbatestgithub-issue.onrender.com/api";
+  const baseUrl = "http://localhost:5600/api";
   const [userData, setUserData] = useState({
     email: "",
     password: "",

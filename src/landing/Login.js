@@ -13,7 +13,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const baseUrl = "https://https-github-com-melbatestgithub-issue.onrender.com/api";
+  const baseUrl = "http://localhost:5600/api";
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
