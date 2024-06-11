@@ -134,7 +134,7 @@ const Chat = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="full_container w-full">
+    <div className="full_container w-full font-sans ">
       <div className="UserList mt-3 pt-4">
         <div className="mt-3">
           <button

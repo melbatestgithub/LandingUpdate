@@ -67,7 +67,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 px-4">
+    <div className="flex flex-col gap-3 px-4 font-sans">
       <div className="flex shadow-xl flex-col px-10 mt-2 border-white justify-center bg-white" style={{ width: "600px" }}>
         <h3 className="text-center text-2xl p-2 font-bold">Personal Information</h3>
         <div className="flex gap-4">

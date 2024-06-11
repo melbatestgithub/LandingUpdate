@@ -109,7 +109,7 @@ const SubmitIssue = () => {
   };
 
   return (
-    <div className="flex justify-center p-20 items-center my-4" style={{ width: "70%" }}>
+    <div className="flex justify-center p-20 items-center my-4 font-sans" style={{ width: "70%" }}>
       <form onSubmit={handleSave}>
         <div className="flex flex-col">
           <h3 className="text-center text-2xl capitalize font-semibold">Create new Issue</h3>

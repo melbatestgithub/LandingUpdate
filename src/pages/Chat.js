@@ -109,7 +109,7 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="full_container w-full">
+    <div className="full_container w-full font-sans">
       <div className="UserList">
         {conversations.map((c) => (
           <div key={c._id} onClick={() => setCurrentChat(c)}>

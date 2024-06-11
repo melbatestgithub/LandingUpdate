@@ -85,7 +85,7 @@ const Notification = () => {
 
   return (
     <div className="">
-      <div className="flex flex-col px-10">
+      <div className="flex flex-col px-10 font-sans">
       <div className="my-2">
   <PDFDownloadLink document={<AssignedIssuesPDF issues={assignedIssues} />} fileName="AssignedIssuesReport.pdf">
     {({ blob, url, loading, error }) =>

@@ -173,7 +173,7 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center shadow-lg h-screen bg-gray-100">
-      <div className="bg-white shadow-md rounded-md p-3 mt-2">
+      <div className="bg-white shadow-md rounded-md p-3 mt-2 font-sans">
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col items-start justify-start p-3">
@@ -318,7 +318,7 @@ const SignUp = () => {
             <div className="flex space-x-6 justify-center items-center">
               <label htmlFor="upload">
                 <div className="flex gap-6 mt-2 pt-2 items-center">
-                  <span className="cursor-pointer bg-green-300 p-2 text-white">
+                  <span className="cursor-pointer bg-sky-700  p-2 text-white">
                     Upload Profile
                   </span>
                   <div
@@ -374,7 +374,7 @@ const SignUp = () => {
           </div>
           <div className="flex items-center flex-col">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className="bg-sky-700  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
               type="submit"
             >
               SignUp

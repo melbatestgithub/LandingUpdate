@@ -57,7 +57,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center  shadow-lg h-screen items-center bg-gray-100 ">
+    <div className="flex justify-center  shadow-lg h-screen items-center bg-gray-100 font-sans">
       <div className="bg-white shadow-md rounded-md p-8  ">
         <h2 className="text-2xl font-bold text-center">Sign In</h2>
         <form onSubmit={handleSubmit}>
@@ -95,7 +95,7 @@ const Login = () => {
             </Link>
           </div>
           <div className="flex items-center flex-col ">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+            <button className="bg-sky-700  hover:bg-sky-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
               Sign In
             </button>
             <p> or login with</p>

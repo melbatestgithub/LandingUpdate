@@ -34,7 +34,7 @@ const Home = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
   return (
-    <div className='flex flex-col p-3'>
+    <div className='flex flex-col p-3 font-sans'>
       <div className='flex justify-between p-4'>
         <div className='p-8 shadow-xl bg-white rounded-md cardContainer'>
           <div className='flex gap-8'>

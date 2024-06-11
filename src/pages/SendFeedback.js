@@ -73,7 +73,7 @@ const SendFeedback = () => {
   };
 
   return (
-    <div className="flex flex-col px-5">
+    <div className="flex flex-col px-5 font-sans">
       <div className="flex flex-col p-3">
         <h3 className="text-center capitalize font-semibold text-lg">
           Send Feedback about Service

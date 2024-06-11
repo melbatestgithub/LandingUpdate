@@ -24,7 +24,7 @@ const History = () => {
     }
   };
   return (
-    <div className="flex flex-col px-8">
+    <div className="flex flex-col px-8 font-sans">
       <div className="">
         <div className="my-2">
         <button className="bg-black text-white font-bold px-4 py-2 rounded-md flex items-center gap-3 hover:bg-gray-700"> 

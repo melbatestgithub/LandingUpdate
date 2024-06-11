@@ -41,7 +41,7 @@ const CheckIssueStatus = () => {
   }
 
   return (
-    <div className="flex justify-center items-center flex-col pl-20 py-20" style={{marginLeft:"5rem"}}>
+    <div className="flex justify-center items-center flex-col pl-20 py-20 font-sans" style={{marginLeft:"5rem"}}>
       <div className="">
         <h3 className="text-center capitalize text-2xl font-semibold">
           Check Issue Status

@@ -54,7 +54,7 @@ const Navbar = () => {
   }, [location.pathname]);
 
   return (
-    <div className="bg-white p-4 fixed top-0 left-0 z-10 mt-0 w-full shadow-xl">
+    <div className="bg-white p-4 fixed top-0 left-0 z-10 mt-0 w-full shadow-xl font-sans">
       <div className="flex justify-between items-center">
         <div className="flex gap-5 px-3">
           <span className="text-lg font-semibold">Welcome</span>
