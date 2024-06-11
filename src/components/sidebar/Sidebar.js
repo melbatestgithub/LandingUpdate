@@ -21,7 +21,7 @@ const Sidebar = () => {
 
   }
   return (
-    <div className="flex h-screen fixed top-16  left-0 overflow-y-auto shadow-xl  font-sans  "  style={{width:"16%"}}>
+    <div className="flex h-screen fixed top-26  left-0 overflow-y-auto shadow-xl  font-sans  "  style={{width:"16%"}}>
       <div className="bg-gray-800 text-white  pt-3 h-full  sidebar ">
         <nav className="overflow-y-auto px-2 ">
           <ul className="flex flex-col gap-3 ">
