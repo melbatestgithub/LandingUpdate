@@ -40,3 +40,36 @@ justify-content: center;
 .chatBox{
 box-shadow: 0 0 4px;
 }
+
+.modal-overlay {
+    position: fixed;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+  }
+  
+  .modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .conversation {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .conversation.active {
+    background-color: #b0a3a3; /* Highlight color for active conversation */
+    font-weight: bold; /* Optional: Make the text bold */
+  }
+  
+  
