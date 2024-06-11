@@ -18,7 +18,7 @@ const Body = () => {
             Our feature-rich help desk software speeds up ticket resolution with the help of proactive automations and highly customizable workflows.
           </p>
         </div>
-        <img className="max-h-[500px] w-[700px] " src={DeskImg} alt="" />
+          <img className="max-h-[500px] w-[700px] " src={DeskImg} alt="" />
       </div>
       <section>
         <h1 className="text-center p-5 tracking-wider text-3xl font-extrabold text-sky-900 font-sans">
