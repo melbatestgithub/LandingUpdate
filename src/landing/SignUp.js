@@ -1,6 +1,6 @@
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Upload from "../assets/upload.jpg";
 import axios from "axios";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
@@ -13,7 +13,7 @@ const SignUp = () => {
     confirmPassword: "",
     firstName: "",
     lastName: "",
-    profile: "",
+    // profile: "",
     phoneNumber: "",
     department: "",
     address: "",
@@ -26,6 +26,7 @@ const SignUp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectGender, setSelectGender] = useState("");
   const [department, setDepartment] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     fetch(`${baseUrl}/department/getAll`)
@@ -116,50 +117,65 @@ const SignUp = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    event.target.value = "";
     console.log(file);
   };
 
-  const startUpload = (file, fileSize) => {
-    const storage = getStorage(app);
-    const storageRef = ref(storage, `profiles/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  const startUpload = (file) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage(app);
+      const storageRef = ref(storage, `profiles/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(`Upload is ${progress}% done`);
-      },
-      (error) => {
-        console.error("File upload error:", error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setUserData((prevUserData) => ({ ...prevUserData, profile: downloadURL }));
-        });
-      }
-    );
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          console.error("File upload error:", error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isValid = Object.values(errors).every((error) => !error) && 
-                    Object.values(userData).every((value) => value !== "");
-    
+
+    // Check if password and confirmPassword match
+    if (userData.password !== userData.confirmPassword) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmPassword: "Passwords do not match",
+      }));
+      return;
+    }
+
+    // Update gender in userData
+    const userDataWithGender = { ...userData, gender: selectGender };
+
+    const isValid = Object.values(errors).every((error) => !error) &&
+                    Object.values(userDataWithGender).every((value) => value !== "");
+
+    console.log("Errors object:", errors); // Log errors object
+    console.log("User data object:", userDataWithGender); // Log user data object
+
     if (isValid) {
       console.log("Form is valid, submitting...");
       try {
-        const userDataWithGender = { ...userData, gender: selectGender };
-        const res = await axios.post(
-          `${baseUrl}/users/register`,
-          userDataWithGender
-        );
-
         if (selectedFile) {
-          startUpload(selectedFile, selectedFile.size);
+          const downloadURL = await startUpload(selectedFile);
+          userDataWithGender.profile = downloadURL;
         }
 
+        await axios.post(`${baseUrl}/users/register`, userDataWithGender);
         setTimeout(() => {
           window.location.href = "/login";
         }, 15000);
@@ -206,7 +222,23 @@ const SignUp = () => {
                 {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
               </div>
             </div>
-
+            {/* Add confirm password field */}
+            <div className="flex justify-around gap-5">
+              <div className="flex flex-col">
+                <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  className="shadow appearance-none border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  name="confirmPassword"
+                  onChange={handleChange}
+                  value={userData.confirmPassword}
+                />
+                {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword}</p>}
+              </div>
+            </div>
+            
             <div className="flex justify-around gap-5">
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-bold mb-2 capitalize">
@@ -314,34 +346,10 @@ const SignUp = () => {
                 </select>
               </div>
             </div>
-            <div></div>
+
             <div className="flex space-x-6 justify-center items-center">
               <label htmlFor="upload">
-                <div className="flex gap-6 mt-2 pt-2 items-center">
-                  <span className="cursor-pointer bg-sky-700  p-2 text-white">
-                    Upload Profile
-                  </span>
-                  <div
-                    className="relative cursor-pointer bg-white rounded-full border-2 border-gray-300 flex items-center justify-center"
-                    style={{ height: "60px", width: "60px" }}
-                  >
-                    <img
-                      src={
-                        userData.profile ||
-                        "https://i.pinimg.com/564x/58/79/29/5879293da8bd698f308f19b15d3aba9a.jpg"
-                      }
-                      alt="Profile"
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                    <input
-                      id="upload"
-                      type="file"
-                      name="profile"
-                      className="sr-only"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                </div>
+            
               </label>
               <div>
                 <p>Gender</p>
@@ -371,10 +379,21 @@ const SignUp = () => {
                 </div>
               </div>
             </div>
+{/* 
+            {uploadProgress > 0 && (
+              <div className="w-full bg-gray-200 rounded-full mt-3">
+                <div
+                  className="bg-blue-600 text-xs leading-none py-1 text-center text-white rounded-full"
+                  style={{ width: `${uploadProgress}%` }}
+                >
+                  {uploadProgress}%
+                </div>
+              </div>
+            )} */}
           </div>
           <div className="flex items-center flex-col">
             <button
-              className="bg-sky-700  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className="bg-sky-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
               type="submit"
             >
               SignUp

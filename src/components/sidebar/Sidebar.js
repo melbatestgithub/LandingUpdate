@@ -20,21 +20,20 @@ const Sidebar = () => {
     dispatch(logout());
     navigate("/login");
   };
-
   return (
     <div className="flex h-screen fixed top-26 left-0 overflow-y-auto shadow-xl font-sans" style={{ width: "16%" }}>
       <div className="bg-gray-800 text-white pt-3 h-full sidebar">
         <nav className="overflow-y-auto px-2">
           <ul className="flex flex-col gap-3">
-            <NavLink to="/dashboard" icon={<TiHome size={26} />} text="Home" />
-            <NavLink to="/dashboard/submitIssue" icon={<GoIssueClosed size={26} />} text="Submit Issue" />
-            <NavLink to="/dashboard/checkIssueStatus" icon={<CiBookmarkCheck size={26} />} text="Issue Status" />
-            <NavLink to="/dashboard/profile" icon={<IoIosSettings size={26} />} text="Accounts" />
-            <NavLink to="/dashboard/feedback" icon={<MdFeedback size={26} />} text="Feedback" />
-            <NavLink to="/dashboard/chatPage" icon={<FaRocketchat size={26} />} text="Message" />
-            <NavLink to="/dashboard/history" icon={<MdHistory size={26} />} text="History" />
+            <NavLink to="/dashboard" icon={<TiHome size={26} className="text-gray-400 "/>} text="Home" className="text-gray-400 "/>
+            <NavLink to="/dashboard/submitIssue" icon={<GoIssueClosed size={26} className="text-gray-400 "/>} text="Submit Issue" className="text-gray-400 "/>
+            <NavLink to="/dashboard/checkIssueStatus" icon={<CiBookmarkCheck size={26} className="text-gray-400 "/>} text="Issue Status" />
+            <NavLink to="/dashboard/profile" icon={<IoIosSettings size={26}className="text-gray-400 " />} text="Accounts" />
+            <NavLink to="/dashboard/feedback" icon={<MdFeedback size={26} className="text-gray-400 "/>} text="Feedback" />
+            <NavLink to="/dashboard/chatPage" icon={<FaRocketchat size={26} className="text-gray-400 "/>} text="Message" />
+            <NavLink to="/dashboard/history" icon={<MdHistory size={26} className="text-gray-400 "/>} text="History" />
             <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
-              <LuLogOut size={26} />
+              <LuLogOut size={26} className="text-gray-400 "/>
               <p className="ml-2 text-xl font-bold">Logout</p>
             </li>
           </ul>
