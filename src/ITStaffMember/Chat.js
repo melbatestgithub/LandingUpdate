@@ -1,3 +1,4 @@
+
 import "./chat.css";
 import Message from "../components/messages/Message";
 import { useState, useEffect, useRef } from "react";
@@ -16,7 +17,7 @@ const Chat = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const socket = useRef();
-  const scrollRef = useRef();
+  const messagesEndRef = useRef();
   const baseUrl = "http://localhost:5600/api";
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const Chat = () => {
     if (user?._id) {
       socket.current.emit("addUser", user._id);
       socket.current.on("getUsers", (users) => {
-        console.log("Connected users:", users);
+        
       });
     }
   }, [user]);
@@ -62,11 +63,13 @@ const Chat = () => {
 
   const createConversation = async () => {
     const receiverId = document.getElementById("receiver").value;
+    console.log("Creating conversation with receiver ID:", receiverId); // Logging
     try {
-      const response = await axios.post(`${baseUrl}/conversations`, {
+      const response = await axios.post(`${baseUrl}/conversations/newconv`, {
         senderID: user._id,
         recieverID: receiverId,
       });
+      console.log("Conversation created:", response.data); // Logging
       setCurrentChat(response.data);
       setConversations((prev) => [...prev, response.data]);
       setIsModalOpen(false); // Close modal after creation
@@ -127,7 +130,7 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const openModal = () => setIsModalOpen(true);
@@ -158,16 +161,15 @@ const Chat = () => {
         <div className="chatBox-wrapper">
           {currentChat ? (
             <>
-              <div>
-                <div>
-                  {messages.map((m) => (
-                    <div key={m._id} ref={scrollRef}>
-                      <Message message={m} own={m.sender === user._id} />
-                    </div>
-                  ))}
-                </div>
+              <div className="messages-container">
+                {messages.map((m) => (
+                  <div key={m._id}>
+                    <Message message={m} own={m.sender === user._id} />
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
               </div>
-              <div className="flex mt-3 justify-between p-3 items-center">
+              <div className="message-input">
                 <textarea
                   className="w-[80%] h-[90px] p-3 border border-gray-300 focus:outline-none rounded-md focus:border-blue-400"
                   placeholder="write something..."
