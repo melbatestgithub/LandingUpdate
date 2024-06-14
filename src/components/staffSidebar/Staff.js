@@ -1,72 +1,53 @@
-
-import React, { useState } from "react";
+import React from "react";
 import { TiHome } from "react-icons/ti";
-import { IoMdNotifications } from "react-icons/io";
+import { CiBookmarkCheck } from "react-icons/ci";
 import { IoIosSettings } from "react-icons/io";
-import { FaRocketchat } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
-import { Link } from "react-router-dom";
-import { logout } from "../../redux/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { logout } from "../../redux/userSlice";
 
 const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const handleItemClick = (itemName) => {
-    setActiveItem(itemName);
-  };
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
-
   return (
-    <div className="flex h-screen fixed top-26 left-0 overflow-y-auto shadow-xl font-sans" style={{ width: "18%" }}>
-      <div className="bg-gray-800 text-white pt-3 h-full sidebar">
-        <nav className="overflow-y-auto px-2">
-          <ul className="flex flex-col gap-3">
-            <Link to="/ItStaffMembers">
-              <li className={`flex p-2 items-center cursor-pointer ${activeItem === "Home" ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white"}`} onClick={() => handleItemClick("Home")}>
-                <TiHome size={26} />
-                <p className="ml-2 text-xl font-bold">Home</p>
-              </li>
-            </Link>
-
-            <Link to="/ItStaffMembers/notification">
-              <li className={`flex p-2 items-center cursor-pointer ${activeItem === "Assigned Issue" ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white"}`} onClick={() => handleItemClick("Assigned Issue")}>
-                <IoMdNotifications size={26} />
-                <p className="ml-2 text-xl font-bold">Assigned Issue</p>
-              </li>
-            </Link>
-
-            <Link to="/ItStaffMembers/profile">
-              <li className={`flex p-2 items-center cursor-pointer ${activeItem === "Accounts" ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white"}`} onClick={() => handleItemClick("Accounts")}>
-                <IoIosSettings size={26} />
-                <p className="ml-2 text-xl font-bold">Accounts</p>
-              </li>
-            </Link>
-
-            <Link to="/ItStaffMembers/chatPage">
-              <li className={`flex p-2 items-center cursor-pointer ${activeItem === "Message" ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white"}`} onClick={() => handleItemClick("Message")}>
-                <FaRocketchat size={26} />
-                <p className="ml-2 text-xl font-bold">Message</p>
-              </li>
-            </Link>
-
-            <li className="flex p-2 items-center cursor-pointer" onClick={handleLogout}>
-              <LuLogOut size={26} />
-              <p className={`ml-2 text-xl font-bold cursor-pointer ${activeItem === "Logout" ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white"}`} onClick={() => handleItemClick("Logout")}>
-                Logout
-              </p>
-            </li>
-          </ul>
+    <div className="flex h-screen fixed top-26 left-0 overflow-y-auto shadow-xl font-sans " style={{ width: "16%" }}>
+      <div className="bg-[#111827] text-white pt-3 h-full sidebar">
+        <nav className="overflow-y-auto px-2 pt-10">
+ 
+<ul className="flex flex-col gap-3">
+  <NavLink to="/ItStaffMembers" icon={<TiHome size={26} className="text-gray-400 "/>} text={<span className="text-gray-400 font-normal text-lg">Home</span>} />
+  <NavLink to="/ItStaffMembers/notification" icon={<CiBookmarkCheck size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Assigned Issues</span>} />
+  <NavLink to="/ItStaffMembers/profile" icon={<IoIosSettings size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Accounts</span>} />
+ 
+  <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
+    <LuLogOut size={26} className="text-gray-400"/>
+    <p className="ml-2  font-bold text-gray-400 font-normal text-lg">Logout</p>
+  </li>
+</ul>
         </nav>
       </div>
     </div>
+  );
+};
+
+// Custom NavLink component to handle active link styling
+const NavLink = ({ to, icon, text }) => {
+  const location = useLocation();
+
+  return (
+    <Link to={to}>
+      <li className={`flex p-2 items-center cursor-pointer ${location.pathname === to ? 'bg-gray-700 text-white' : 'hover:bg-slate-800 hover:text-white'}`}>
+        {icon}
+        <p className="ml-2 text-xl font-bold">{text}</p>
+      </li>
+    </Link>
   );
 };
 
