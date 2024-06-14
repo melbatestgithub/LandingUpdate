@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
@@ -13,12 +12,14 @@ const Home = () => {
     inProgressCount: 0,
     solvedCount: 0,
   });
+  const [latestIssue, setLatestIssue] = useState(null);
+  const [error, setError] = useState('');
 
-  const userId=JSON.parse(localStorage.getItem("user")).others._id
+  const userId = JSON.parse(localStorage.getItem("user")).others._id;
+
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-       
         const response = await axios.get(`http://localhost:5600/api/issue/counts/${userId}`);
         setCounts(response.data);
       } catch (error) {
@@ -26,8 +27,23 @@ const Home = () => {
       }
     };
 
+    const fetchLatestIssue = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5600/api/issue/latest/${userId}`);
+        if (response.data) {
+          setLatestIssue(response.data);
+        } else {
+          setError('You have not submitted any issue so far');
+        }
+      } catch (error) {
+        console.error('Failed to fetch the latest issue:', error);
+        setError('Failed to fetch the latest issue');
+      }
+    };
+
     fetchCounts();
-  }, []);
+    fetchLatestIssue();
+  }, [userId]);
 
   const data = [
     { id: 0, value: counts.submittedCount, name: 'Submitted Issues' },
@@ -71,9 +87,18 @@ const Home = () => {
           </div>
         </div>
       </div>
+      
       <div className='p-4 mt-5 shadow-xl mb-5 cardContainer bg-white flex flex-col' style={{ height: '400px', width: '700px' }}>
-        <h3 className='mb-4 bg-gray-800 text-white p-2 rounded-md'>Current  Submitted  Issue</h3>
-          Latest Submitted Issue  ,fetch only one latest issue submitted by me
+        <h3 className='mb-4 bg-gray-800 text-white p-2 rounded-md'>Current Submitted Issue</h3>
+        {latestIssue ? (
+          <div>
+            <p><strong>Title:</strong> {latestIssue.title}</p>
+            <p><strong>Description:</strong> {latestIssue.description}</p>
+            <p><strong>Status:</strong> {latestIssue.status}</p>
+          </div>
+        ) : (
+          <p>{error}</p>
+        )}
       </div>
     </div>
   );
