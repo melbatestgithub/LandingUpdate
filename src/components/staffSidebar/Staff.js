@@ -3,6 +3,7 @@ import { TiHome } from "react-icons/ti";
 import { CiBookmarkCheck } from "react-icons/ci";
 import { IoIosSettings } from "react-icons/io";
 import { LuLogOut } from "react-icons/lu";
+import { FaRocketchat } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice";
@@ -25,6 +26,7 @@ const Sidebar = () => {
   <NavLink to="/ItStaffMembers" icon={<TiHome size={26} className="text-gray-400 "/>} text={<span className="text-gray-400 font-normal text-lg">Home</span>} />
   <NavLink to="/ItStaffMembers/notification" icon={<CiBookmarkCheck size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Assigned Issues</span>} />
   <NavLink to="/ItStaffMembers/profile" icon={<IoIosSettings size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Accounts</span>} />
+  <NavLink to="/ItStaffMembers/chatPage" icon={<FaRocketchat size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Chat page</span>} />
  
   <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
     <LuLogOut size={26} className="text-gray-400"/>
