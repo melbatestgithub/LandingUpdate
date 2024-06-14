@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import DeskImg from '../assets/help-desk-automation.webp';
 import problem from '../assets/problem.png';
 import barChart from '../assets/bar-chart.png';
@@ -7,6 +6,19 @@ import Plus from '../assets/plus.png';
 import caution from '../assets/caution.png';
 
 const Body = () => {
+  const [faqs, setFaqs] = useState([]);
+  const [expandedFAQ, setExpandedFAQ] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5600/api/FAQ/getFaq')
+      .then((response) => response.json())
+      .then((data) => setFaqs(data));
+  }, []);
+
+  const handleToggleFAQ = (index) => {
+    setExpandedFAQ(expandedFAQ === index ? null : index);
+  };
+
   return (
     <div>
       <div className="flex" id="features">
@@ -18,7 +30,7 @@ const Body = () => {
             Our feature-rich help desk software speeds up ticket resolution with the help of proactive automations and highly customizable workflows.
           </p>
         </div>
-          <img className="max-h-[500px] w-[700px] " src={DeskImg} alt="" />
+        <img className="max-h-[500px] w-[700px]" src={DeskImg} alt="" />
       </div>
       <section>
         <h1 className="text-center p-5 tracking-wider text-3xl font-extrabold text-sky-900 font-sans">
@@ -55,48 +67,22 @@ const Body = () => {
         <h1 className="text-center font-extrabold text-6xl p-10 pb-8 text-sky-700 font-sans">FAQ</h1>
         <p className="text-center text-2xl font-sans">Popular questions.</p>
         <div className="mb-10">
-          <div className="flex space-x-10 mx-10 mt-10">
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>What is IT support</p>
+          {faqs.map((faq, index) => (
+            <div key={index} className="flex space-x-10 mx-10 mt-10">
+              <div 
+                className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans"
+                onClick={() => handleToggleFAQ(index)}
+              >
+                <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
+                <p>{faq.question}</p>
+              </div>
+              {expandedFAQ === index && (
+                <div className="text-xl px-10 py-5 font-sans bg-gray-100 rounded-lg shadow-lg">
+                  {faq.answer}
+                </div>
+              )}
             </div>
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[20px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>How to get IT support</p>
-            </div>
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>How much IT cost</p>
-            </div>
-          </div>
-          <div className="flex space-x-10 mx-10 mt-10">
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px]  h-[30px]" src={Plus} alt="" />
-              <p>What is IT support</p>
-            </div>
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>How to get IT support</p>
-            </div>
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>How much IT cost</p>
-            </div>
-          </div>
-          <div className="flex space-x-10 mx-10 mt-10">
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>What is IT support</p>
-            </div>
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>How to get IT support</p>
-            </div>
-            <div className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans">
-              <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
-              <p>How much IT cost</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
