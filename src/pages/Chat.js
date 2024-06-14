@@ -60,20 +60,21 @@ const Chat = () => {
     }
   };
 
+
   const createConversation = async () => {
     const receiverId = document.getElementById("receiver").value;
-
+  
     // Check if conversation already exists
     const existingConversation = conversations.find(c => 
       c.members.includes(user._id) && c.members.includes(receiverId)
     );
-
+  
     if (existingConversation) {
       alert("Conversation already exists between these users.");
       setIsModalOpen(false);
       return;
     }
-
+  
     try {
       const response = await axios.post(`${baseUrl}/conversations/newconv`, {
         senderID: user._id,
@@ -86,6 +87,7 @@ const Chat = () => {
       console.error("Error creating conversation:", error);
     }
   };
+  
 
   useEffect(() => {
     const getMessages = async () => {
@@ -102,35 +104,48 @@ const Chat = () => {
     }
   }, [currentChat]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const messageObj = {
-      sender: user._id,
-      message: newMessage,
-      conversationId: currentChat ? currentChat._id : null,
-    };
   
-    if (!currentChat) {
-      console.error("No active conversation selected.");
-      return;
-    }
-  
-    const receiverId = currentChat.members.find((member) => member !== user._id);
-    socket.current.emit("sendMessage", {
-      senderId: user._id,
-      receiverId,
-      text: newMessage,
-    });
-  
-    try {
-      const res = await axios.post(`${baseUrl}/messages`, messageObj);
-      setMessages((prevMessages) => [...prevMessages, res.data]);
-      setNewMessage("");
-    } catch (error) {
-      console.log("Error sending message:", error);
-    }
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const messageObj = {
+    sender: user._id,
+    message: newMessage,
+    conversationId: currentChat ? currentChat._id : null,
   };
 
+  // Check if there's an active conversation selected
+  if (!currentChat) {
+    alert("Please select a conversation to send a message.");
+    return;
+  }
+
+  // Check if currentChat.members is defined and has at least one member
+  if (!currentChat.members || currentChat.members.length === 0) {
+    alert("Selected conversation does not have valid members.");
+    return;
+  }
+
+  const receiverId = currentChat.members.find((member) => member !== user._id);
+  if (!receiverId) {
+    alert("Unable to determine receiver. Please select a valid conversation.");
+    return;
+  }
+
+  socket.current.emit("sendMessage", {
+    senderId: user._id,
+    receiverId,
+    text: newMessage,
+  });
+
+  try {
+    const res = await axios.post(`${baseUrl}/messages`, messageObj);
+    setMessages((prevMessages) => [...prevMessages, res.data]);
+    setNewMessage("");
+  } catch (error) {
+    console.log("Error sending message:", error);
+  }
+};
   useEffect(() => {
     const fetchUsers = async () => {
       try {
