@@ -1,4 +1,3 @@
-
 import "./chat.css";
 import Message from "../components/messages/Message";
 import { useState, useEffect, useRef } from "react";
@@ -63,6 +62,18 @@ const Chat = () => {
 
   const createConversation = async () => {
     const receiverId = document.getElementById("receiver").value;
+
+    // Check if conversation already exists
+    const existingConversation = conversations.find(c => 
+      c.members.includes(user._id) && c.members.includes(receiverId)
+    );
+
+    if (existingConversation) {
+      alert("Conversation already exists between these users.");
+      setIsModalOpen(false);
+      return;
+    }
+
     try {
       const response = await axios.post(`${baseUrl}/conversations/newconv`, {
         senderID: user._id,
@@ -96,16 +107,21 @@ const Chat = () => {
     const messageObj = {
       sender: user._id,
       message: newMessage,
-      conversationId: currentChat._id,
+      conversationId: currentChat ? currentChat._id : null,
     };
-
+  
+    if (!currentChat) {
+      console.error("No active conversation selected.");
+      return;
+    }
+  
     const receiverId = currentChat.members.find((member) => member !== user._id);
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
       text: newMessage,
     });
-
+  
     try {
       const res = await axios.post(`${baseUrl}/messages`, messageObj);
       setMessages((prevMessages) => [...prevMessages, res.data]);
