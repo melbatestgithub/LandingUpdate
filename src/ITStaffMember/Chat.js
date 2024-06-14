@@ -17,7 +17,7 @@ const Chat = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const socket = useRef();
-  const messagesEndRef = useRef();
+  const scrollRef = useRef();
   const baseUrl = "http://localhost:5600/api";
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Chat = () => {
     if (user?._id) {
       socket.current.emit("addUser", user._id);
       socket.current.on("getUsers", (users) => {
-        
+        console.log("Connected users:", users);
       });
     }
   }, [user]);
@@ -63,13 +63,19 @@ const Chat = () => {
 
   const createConversation = async () => {
     const receiverId = document.getElementById("receiver").value;
-    console.log("Creating conversation with receiver ID:", receiverId); // Logging
     try {
       const response = await axios.post(`${baseUrl}/conversations/newconv`, {
         senderID: user._id,
         recieverID: receiverId,
       });
-      console.log("Conversation created:", response.data); // Logging
+
+      if (response.data.message === "Conversation already exists between these users.") {
+        alert(response.data.message);
+        setCurrentChat(response.data.conversation);
+        setIsModalOpen(false);
+        return;
+      }
+
       setCurrentChat(response.data);
       setConversations((prev) => [...prev, response.data]);
       setIsModalOpen(false); // Close modal after creation
@@ -98,10 +104,20 @@ const Chat = () => {
     const messageObj = {
       sender: user._id,
       message: newMessage,
-      conversationId: currentChat._id,
+      conversationId: currentChat ? currentChat._id : null,
     };
 
+    if (!currentChat || !currentChat.members) {
+      alert("Please select a conversation to send a message.");
+      return;
+    }
+
     const receiverId = currentChat.members.find((member) => member !== user._id);
+    if (!receiverId) {
+      alert("Unable to determine receiver. Please select a valid conversation.");
+      return;
+    }
+
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -130,14 +146,14 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="full_container w-full font-sans ">
+    <div className="full_container w-full font-sans">
       <div className="UserList mt-3 pt-4">
         <div className="mt-3">
           <button
@@ -163,11 +179,10 @@ const Chat = () => {
             <>
               <div className="messages-container">
                 {messages.map((m) => (
-                  <div key={m._id}>
+                  <div key={m._id} ref={scrollRef}>
                     <Message message={m} own={m.sender === user._id} />
                   </div>
                 ))}
-                <div ref={messagesEndRef} />
               </div>
               <div className="message-input">
                 <textarea

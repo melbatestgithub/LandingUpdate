@@ -22,21 +22,22 @@ const Sidebar = () => {
   };
   return (
     <div className="flex h-screen fixed top-26 left-0 overflow-y-auto shadow-xl font-sans" style={{ width: "16%" }}>
-      <div className="bg-gray-800 text-white pt-3 h-full sidebar">
+      <div className="bg-[#111827] text-white pt-3 h-full sidebar">
         <nav className="overflow-y-auto px-2">
-          <ul className="flex flex-col gap-3">
-            <NavLink to="/dashboard" icon={<TiHome size={26} className="text-gray-400 "/>} text="Home" className="text-gray-400 "/>
-            <NavLink to="/dashboard/submitIssue" icon={<GoIssueClosed size={26} className="text-gray-400 "/>} text="Submit Issue" className="text-gray-400 "/>
-            <NavLink to="/dashboard/checkIssueStatus" icon={<CiBookmarkCheck size={26} className="text-gray-400 "/>} text="Issue Status" />
-            <NavLink to="/dashboard/profile" icon={<IoIosSettings size={26}className="text-gray-400 " />} text="Accounts" />
-            <NavLink to="/dashboard/feedback" icon={<MdFeedback size={26} className="text-gray-400 "/>} text="Feedback" />
-            <NavLink to="/dashboard/chatPage" icon={<FaRocketchat size={26} className="text-gray-400 "/>} text="Message" />
-            <NavLink to="/dashboard/history" icon={<MdHistory size={26} className="text-gray-400 "/>} text="History" />
-            <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
-              <LuLogOut size={26} className="text-gray-400 "/>
-              <p className="ml-2 text-xl font-bold">Logout</p>
-            </li>
-          </ul>
+ 
+<ul className="flex flex-col gap-3">
+  <NavLink to="/dashboard" icon={<TiHome size={26} className="text-gray-400 "/>} text={<span className="text-gray-400 font-normal text-lg">Home</span>} />
+  <NavLink to="/dashboard/submitIssue" icon={<GoIssueClosed size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Submit Issue</span>} />
+  <NavLink to="/dashboard/checkIssueStatus" icon={<CiBookmarkCheck size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Issue Status</span>} />
+  <NavLink to="/dashboard/profile" icon={<IoIosSettings size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Accounts</span>} />
+  <NavLink to="/dashboard/feedback" icon={<MdFeedback size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Feedback</span>} />
+  <NavLink to="/dashboard/chatPage" icon={<FaRocketchat size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Message</span>} />
+  <NavLink to="/dashboard/history" icon={<MdHistory size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">History</span>} />
+  <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
+    <LuLogOut size={26} className="text-gray-400"/>
+    <p className="ml-2  font-bold text-gray-400 font-normal text-lg">Logout</p>
+  </li>
+</ul>
         </nav>
       </div>
     </div>
