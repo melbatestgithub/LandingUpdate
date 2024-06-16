@@ -43,7 +43,7 @@ const Home = ({ darkMode }) => {
           </div>
           <div className='flex items-center justify-between mt-2'>
             <p className={`text-center mt-3 py-2 text-lg w-10 rounded-lg ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-800 text-white'}`}>{counts.assignedCount}</p>
-            <p>+12% this month</p>
+            <p>+6% this month</p>
           </div>
         </div>
         <div className={`p-8 shadow-xl rounded-md cardContainer ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
@@ -53,7 +53,7 @@ const Home = ({ darkMode }) => {
           </div>
           <div className='flex items-center gap-6 mt-2'>
             <p className={`text-center mt-3 py-2 text-lg w-10 rounded-lg ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-800 text-white'}`}>{counts.solvedCount}</p>
-            <p>+12% this month</p>
+            <p>+8% this month</p>
           </div>
         </div>
         <div className={`p-8 shadow-xl rounded-md cardContainer ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
@@ -63,7 +63,7 @@ const Home = ({ darkMode }) => {
           </div>
           <div className='flex items-center justify-between mt-2'>
             <p className={`text-center mt-3 py-2 text-lg w-10 rounded-lg ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-800 text-white'}`}>{counts.RejectedCount}</p>
-            <p>+12% this month</p>
+            <p>+4% this month</p>
           </div>
         </div>
       </div>

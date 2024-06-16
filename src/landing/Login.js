@@ -13,39 +13,86 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  // State variables for validation messages and error message
+  const [validationErrors, setValidationErrors] = useState({
+    email: "",
+    password: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+
   const baseUrl = "http://localhost:5600/api";
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
+
+    // Validate inputs
+    if (e.target.name === "email") {
+      setValidationErrors({
+        ...validationErrors,
+        email: validateEmail(e.target.value) ? "" : "Invalid email format",
+      });
+    } else if (e.target.name === "password") {
+      setValidationErrors({
+        ...validationErrors,
+        password:
+          e.target.value.length >= 6 ? "" : "Password must be at least 6 characters",
+      });
+    }
+  };
+
+  const validateEmail = (email) => {
+    // Basic email validation regex
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginStart());
 
-    try {
-      const res = await axios.post(`${baseUrl}/users/login`, loginData);
-      const department = res.data.others.department;
-      console.log(department);
+    // Check if form is valid before submitting
+    if (validateForm()) {
+      dispatch(loginStart());
 
-      const isITStaff = department.includes("IT Staff");
-      if (isITStaff) {
+      try {
+        const res = await axios.post(`${baseUrl}/users/login`, loginData);
+        const department = res.data.others.department;
+        console.log(department);
+
+        const isITStaff = department.includes("IT Staff");
+        if (isITStaff) {
+          setTimeout(() => {
+            window.location.href = "/ItStaffMembers";
+          }, 0); // Redirect immediately
+        } else {
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 0); // Redirect immediately
+        }
+
+        dispatch(loginSuccess(res.data));
+        console.log("Logged In user");
+      } catch (error) {
+        dispatch(loginFailure());
+        setErrorMessage("Incorrect Username or password");
+        // Clear the error message after a few seconds
         setTimeout(() => {
-          window.location.href = "/ItStaffMembers";
-        }, 0); // Redirect immediately
-      } else {
-        setTimeout(() => {
-          window.location.href = "/dashboard";
-        }, 0); // Redirect immediately
+          setErrorMessage("");
+        }, 5000); // Clear error message after 5 seconds
       }
-
-      dispatch(loginSuccess(res.data));
-      console.log("Logged In user");
-    } catch (error) {
-      dispatch(loginFailure());
-      alert("Incorrect Username or password");
-      window.location.reload();
     }
+  };
+
+  const validateForm = () => {
+    // Validate all fields
+    const emailValid = validateEmail(loginData.email);
+    const passwordValid = loginData.password.length >= 6;
+
+    setValidationErrors({
+      email: emailValid ? "" : "Invalid email format",
+      password: passwordValid ? "" : "Password must be at least 6 characters",
+    });
+
+    return emailValid && passwordValid;
   };
 
   const googleAuth = () => {
@@ -67,21 +114,31 @@ const Login = () => {
             </label>
             <input
               type="text"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                validationErrors.email ? "border-red-500" : ""
+              }`}
               name="email"
               onChange={handleChange}
               value={loginData.email}
             />
+            {validationErrors.email && (
+              <p className="text-red-500 text-xs italic">{validationErrors.email}</p>
+            )}
             <label className="text-gray-700 text-sm  mb-2 capitalize">
               Password
             </label>
             <input
               type="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                validationErrors.password ? "border-red-500" : ""
+              }`}
               name="password"
               onChange={handleChange}
               value={loginData.password}
             />
+            {validationErrors.password && (
+              <p className="text-red-500 text-xs italic">{validationErrors.password}</p>
+            )}
           </div>
           <div className="flex  space-x-8 mb-2">
             <div className="flex gap-2">
@@ -94,6 +151,9 @@ const Login = () => {
               </p>
             </Link>
           </div>
+          {errorMessage && (
+            <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
+          )}
           <div className="flex items-center flex-col ">
             <button className="bg-sky-700  hover:bg-sky-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
               Sign In

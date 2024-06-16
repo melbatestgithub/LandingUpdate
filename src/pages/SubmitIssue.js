@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { FaTimes } from "react-icons/fa"; // Import close icon from react-icons library
+import { Link } from "react-router-dom";
 
 const SubmitIssue = () => {
   const baseUrl = "http://localhost:5600/api";
@@ -23,6 +24,7 @@ const SubmitIssue = () => {
     roomNumber: "",
     description: "",
   }); // State to store validation errors
+  const [issueId, setIssueId] = useState(""); // State to store the issue ID
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -87,8 +89,15 @@ const SubmitIssue = () => {
 
       const response = await axios.post(`${baseUrl}/issue/newIssue`, issueData);
       console.log(response.data.issueId); // Log the response to check its structure
-      const issueId = response.data.issueId || response.data.id || response.data._id; // Extract issue ID based on actual response structure
-      setSuccessMessage(`Issue submitted successfully! Issue ID: ${issueId}`); // Set the success message
+      const newIssueId = response.data.issueId || response.data.id || response.data._id; // Extract issue ID based on actual response structure
+
+      // Set issueId state
+      setIssueId(newIssueId);
+
+      // Construct success message with Issue ID and link
+      setSuccessMessage(`Issue submitted successfully. copy issue Id below! Issue ID: ${newIssueId}.  `);
+
+      // Clear form inputs
       setIssueDetail({
         title: "",
         category: "",
@@ -183,13 +192,12 @@ const SubmitIssue = () => {
             {errors.description && <p className="text-red-500">{errors.description}</p>}
             <div className="flex justify-around mt-2">
               <button
-                className="bg-blue-700 hover:bg-blue-800 py-2 px-6 text-white font-semibold rounded cursor-pointer"
+                className="bg-sky-700 hover:bg-blue-800 py-2 px-6 text-white font-semibold rounded cursor-pointer"
                 type="submit"
               >
                 Save
               </button>
-              <p className="bg-red-700 hover:bg-red-800 py-2
-px-6 text-white font-semibold rounded cursor-pointer">
+              <p className="bg-red-700 hover:bg-red-800 py-2 px-6 text-white font-semibold rounded cursor-pointer">
                 Cancel
               </p>
             </div>
@@ -199,7 +207,7 @@ px-6 text-white font-semibold rounded cursor-pointer">
       {successMessage && (
         <div className="mt-4 mx-3 p-4 border rounded bg-green-100 relative">
           <FaTimes className="absolute top-0 right-0 m-3 cursor-pointer" onClick={handleCloseSuccessMessage} /> {/* Close icon */}
-          <p className="text-green-700 font-semibold">{successMessage}</p>
+          <p className="text-green-700 font-semibold">{successMessage} <Link to={`/dashboard/checkIssueStatus`} className="text-gray-500">click here to check status</Link></p>
         </div>
       )}
     </div>

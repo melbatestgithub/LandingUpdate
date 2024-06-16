@@ -102,13 +102,13 @@ const Navbar = () => {
                 )}
               </Link>
             </div>
-            <button className="cursor-pointer">
-              <CiDark className="text-white relative" size={28} color="black" />
+            <button className="cursor-pointer bg-sky-700 text-white px-3 py-2 rounded-lg font-bold">
+             Logout
             </button>
             <div>
               <Link to={profileLink}>
                 <img
-                  src={user.profile}
+                  src={user.profile||"https://i.pinimg.com/564x/d2/98/4e/d2984ec4b65a8568eab3dc2b640fc58e.jpg"}
                   className="rounded-full object-cover w-10 h-10"
                   alt="Profile"
                 />

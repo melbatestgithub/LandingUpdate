@@ -3,10 +3,26 @@ import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import axios from 'axios';
-import './home.css';
+import './home.css';  
+import { Link } from 'react-router-dom';
 
 const Home = () => {
+  const emptyIssue=()=>{
+  return(
+    <div className='flex gap-2 items-center'>
+      <p className='p-2 text-lg'>You have not submitted any issue so far</p>
+      <Link to="/dashboard/submitIssue">
+      <p className='text-gray-600 '>
+       submit your first issue
+
+      </p>
+      </Link>
+    </div>
+  )
+  }
   const [counts, setCounts] = useState({
     submittedCount: 0,
     inProgressCount: 0,
@@ -33,7 +49,7 @@ const Home = () => {
         if (response.data) {
           setLatestIssue(response.data);
         } else {
-          setError('You have not submitted any issue so far');
+          setError(emptyIssue() );
         }
       } catch (error) {
         console.error('Failed to fetch the latest issue:', error);
@@ -63,27 +79,27 @@ const Home = () => {
           </div>
           <div className='flex items-center justify-between mt-2'>
             <p className='text-center mt-3 py-2 text-lg bg-gray-800 w-10 text-white rounded-lg'>{counts.submittedCount}</p>
-            <p>+12% this month</p>
+            <p>+10% this month</p>
           </div>
         </div>
         <div className='p-8 shadow-xl bg-white rounded-md cardContainer'>
           <div className='flex gap-8'>
             <p className='font-semibold text-black text-lg'>In Progress</p>
-            <AssignmentTurnedInIcon fontSize='large' />
+            <PublishedWithChangesIcon fontSize='large' />
           </div>
           <div className='flex items-center gap-6 mt-2'>
             <p className='text-center mt-3 py-2 text-lg bg-gray-800 w-10 text-white rounded-lg'>{counts.inProgressCount}</p>
-            <p>+12% this month</p>
+            <p>+3% this month</p>
           </div>
         </div>
         <div className='p-8 shadow-xl bg-white rounded-md cardContainer'>
           <div className='flex gap-8'>
             <p className='font-semibold text-black text-lg'>Solved</p>
-            <ThumbDownAltIcon fontSize='large' />
+            <DoneAllIcon fontSize='large' />
           </div>
           <div className='flex items-center justify-between mt-2'>
             <p className='text-center mt-3 py-2 text-lg bg-gray-800 w-10 text-white rounded-lg'>{counts.solvedCount}</p>
-            <p>+12% this month</p>
+            <p>+6% this month</p>
           </div>
         </div>
       </div>

@@ -42,7 +42,7 @@ const Body = () => {
             <p className="text-center text-2xl text-sky-700 font-sans">Incident management</p>
             <hr className="my-2 mx-3" />
             <p className="text-center text-lg px-5 pt-2 pb-10 leading-10 font-sans">
-              Reduce service disruptions, meet your <br /> SLAs, improve technicians' productivity,<br /> and manage the entire life cycle of a ticket.
+              Detection and logging of Issues <br /> Incident categorization and prioritization <br /> User Communication,keeping user informed about the incident status.
             </p>
           </div>
           <div className="border-2 m-5 shadow-2xl">
@@ -50,7 +50,7 @@ const Body = () => {
             <p className="text-center text-2xl text-sky-700 font-sans">Problem management</p>
             <hr className="my-2 mx-3" />
             <p className="text-center text-lg px-5 pt-2 pb-10 leading-10 font-sans">
-              Reduce service disruptions, meet your <br /> SLAs, improve technicians' productivity,<br /> and manage the entire life cycle of a ticket.
+              Reduce service disruptions <br /> Resolving Employee Issues accuretly and timely<br /> and manage the entire life cycle of a ticket.
             </p>
           </div>
           <div className="border-2 m-5 shadow-2xl">
@@ -58,7 +58,7 @@ const Body = () => {
             <p className="text-center text-2xl text-sky-700 font-sans">Advanced Analytics</p>
             <hr className="my-2 mx-3" />
             <p className="text-center text-lg px-5 pt-2 pb-10 leading-10 font-sans">
-              Reduce service disruptions, meet your <br /> SLAs, improve technicians' productivity,<br /> and manage the entire life cycle of a ticket.
+              Analytics of Issue <br /> That are <br /> Solved,Rejected,InProgress
             </p>
           </div>
         </div>

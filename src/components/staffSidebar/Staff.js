@@ -18,7 +18,7 @@ const Sidebar = () => {
     navigate("/login");
   };
   return (
-    <div className="flex h-screen fixed top-26 left-0 overflow-y-auto shadow-xl font-sans " style={{ width: "16%" }}>
+    <div className="flex h-screen fixed top-26 left-0 overflow-y-auto shadow-xl font-sans " style={{ width: "17%" }}>
       <div className="bg-[#111827] text-white pt-3 h-full sidebar">
         <nav className="overflow-y-auto px-2 pt-10">
  

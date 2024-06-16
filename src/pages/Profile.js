@@ -99,7 +99,7 @@ const Profile = () => {
           <h3 className="text-xl text-gray-600 font-semibold">{user.gender}</h3>
         </div>
         <div style={{ width: "200px" }} className="mt-2 flex items-center justify-center">
-          <img src={user.profile} className="w-full object-cover mb-2" style={{ height: "200px" }} alt="Profile" />
+          <img src={user.profile||"https://i.pinimg.com/564x/d2/98/4e/d2984ec4b65a8568eab3dc2b640fc58e.jpg"} className="w-full object-cover mb-2" style={{ height: "200px" }} alt="Profile" />
         </div>
       </div>
       <div className="flex p-6 mt-2 flex-col bg-white w-full shadow-xl pb-8 mb-8">

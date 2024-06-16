@@ -90,7 +90,7 @@ const Notification = () => {
   <PDFDownloadLink document={<AssignedIssuesPDF issues={assignedIssues} />} fileName="AssignedIssuesReport.pdf">
     {({ blob, url, loading, error }) =>
       loading ? "Loading document..." : (
-        <button className="bg-black text-white font-bold px-4 py-2 rounded-md flex items-center gap-3 hover:bg-gray-700">
+        <button className="bg-sky-700 text-white font-bold px-4 py-2 rounded-md flex items-center gap-3 hover:bg-gray-700">
           <FaDownload size={25} />
           Export
         </button>
@@ -125,7 +125,7 @@ const Notification = () => {
             <div className="flex justify-around mt-4 w-80 gap-5">
               <button
                 onClick={() => handleAccept(issue._id)}
-                className={`py-2 px-6 text-white font-semibold rounded cursor-pointer ${issue.status === "In progress" || issue.status === "Solved" ? "bg-green-300" : "bg-green-500 hover:bg-green-600"}`}
+                className={`py-2 px-6 text-white font-semibold rounded cursor-pointer ${issue.status === "In progress" || issue.status === "Solved" ? "bg-green-300" : "bg-sky-700 hover:bg-green-600"}`}
                 type="button"
                 disabled={issue.status === "In progress" || issue.status === "Solved"}
               >
@@ -133,7 +133,7 @@ const Notification = () => {
               </button>
               <button
                 onClick={() => handleDone(issue._id)}
-                className={`py-2 px-6 text-white font-semibold roundedcursor-pointer ${issue.status === "Solved" ? "bg-green-300" : "bg-green-500 hover:bg-green-600"}`}
+                className={`py-2 px-6 text-white font-semibold roundedcursor-pointer ${issue.status === "Solved" ? "bg-green-300" : "bg-sky-700 hover:bg-green-600"}`}
                 type="button"
                 disabled={issue.status === "Solved"}
               >

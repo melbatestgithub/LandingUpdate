@@ -5,6 +5,9 @@ import social from '../assets/social.png'
 import tiktok from '../assets/tiktok.png'
 import ethiopia from '../assets/ethiopia.png'
 import Fb from '../assets/fb.png'
+import { MdOutlineMail } from "react-icons/md";
+import { FaPhone } from "react-icons/fa";
+import { IoLocationOutline } from "react-icons/io5";
 const Footer = () => {
   return (
     <div>
@@ -24,18 +27,33 @@ const Footer = () => {
       <div>
         <div>
           <h1 class="text-sky-700 font-extrabold text-xl pt-8">Useful Links</h1>
-          <p class="font-thin text-lg  text-slate-700 pt-6">We value your input and want to hear <br />from you. If you have any questions or<br /> feedback about our services, please <br /> contact us.</p>
-          <h1 class="text-sky-700 font-extrabold text-xl pt-4"> Working Hours</h1>
+           <div className='flex flex-col'>
+            <a className='text-gray-800' href="#features">features</a>
+            <a href="#faq">FAQ</a>
+            
+           </div>
+          <h1 class="text-sky-700 font-extrabold text-xl pt-4"> Additional Links</h1>
           <div class="font-thin text-lg  text-slate-700 pt-4"></div>
-          <p>Monday to Friday</p>
-          <p>8 AM - 5:30 PM</p>
+          <p><a>Minstry of Education</a></p>
+          <p><a></a></p>
         </div>
       </div>
       <div class="border-l-2 border-sky-700 mx-[60px] "></div>
       <div>
         <div>
           <h1 class="text-sky-700 font-extrabold text-xl pt-8">Contact Us</h1>
-          <p class="font-thin text-lg  text-slate-700 pt-6">We value your input and want to hear <br />from you. If you have any questions or<br /> feedback about our services, please <br /> contact us.</p>
+          <div className='flex items-center gap-3 py-2'>
+            <MdOutlineMail className='text-gray-800' size={24}/>
+            <span>info@moe.gov.et</span>
+          </div>
+          <div className='flex items-center gap-3 py-2'>
+            <FaPhone className='text-gray-800' size={24}/>
+            <span>+251-11-155-3133</span>
+          </div>
+          <div className='flex items-center gap-3 py-2'>
+            <IoLocationOutline className='text-gray-800' size={24}/>
+            <span>Arada Sub-city,Addis Ababa</span>
+          </div>
           <h1 class="text-sky-700 font-extrabold text-xl pt-4"> Working Hours</h1>
           <div class="font-thin text-lg  text-slate-700 pt-4"></div>
           <p>Monday to Friday</p>
