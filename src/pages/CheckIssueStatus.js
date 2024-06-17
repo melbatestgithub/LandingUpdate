@@ -9,6 +9,13 @@ const CheckIssueStatus = () => {
   const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
 
   const handleCheckStatus = async () => {
+    if (!issueId) {
+      setErrorMessage("Please fill this input field.");
+      setShowDetails(false);
+      setIssueDetails(null);
+      return;
+    }
+
     const baseUrl = "http://localhost:5600/api";
     try {
       const res = await axios.get(`${baseUrl}/issue/singleIssue/${issueId}`);
@@ -19,7 +26,7 @@ const CheckIssueStatus = () => {
       } else {
         setIssueDetails(null);
         setShowDetails(false);
-        setErrorMessage("You have entered an invalid Issue ID.");
+        setErrorMessage("You have Entered Invalid details. Please try again.");
       }
     } catch (error) {
       console.error("Error fetching issue details:", error);

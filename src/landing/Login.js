@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { loginStart, loginSuccess, loginFailure} from "../redux/userSlice";
+import { loginStart, loginSuccess, loginFailure } from "../redux/userSlice";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
@@ -73,12 +73,22 @@ const Login = () => {
         console.log("Logged In user");
       } catch (error) {
         dispatch(loginFailure());
-        setErrorMessage("Incorrect Username or password");
+        if (error.response && error.response.status === 404) {
+          setErrorMessage("A user is not found");
+        } else {
+          setErrorMessage("Incorrect Email or password");
+        }
         // Clear the error message after a few seconds
         setTimeout(() => {
           setErrorMessage("");
         }, 5000); // Clear error message after 5 seconds
       }
+    } else {
+      setErrorMessage("An error occurred, All input fields are required");
+      // Clear the error message after a few seconds
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000); // Clear error message after 5 seconds
     }
   };
 
@@ -104,12 +114,12 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center  shadow-lg h-screen items-center bg-gray-100 font-sans">
-      <div className="bg-white shadow-md rounded-md p-8  ">
+    <div className="flex justify-center shadow-lg h-screen items-center bg-gray-100 font-sans">
+      <div className="bg-white shadow-md rounded-md p-8">
         <h2 className="text-2xl font-bold text-center">Sign In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-2 flex flex-col items-start justify-start p-5">
-            <label className=" text-gray-700 text-sm  mb-2 capitalize">
+            <label className="text-gray-700 text-sm mb-2 capitalize">
               Email Address
             </label>
             <input
@@ -124,7 +134,7 @@ const Login = () => {
             {validationErrors.email && (
               <p className="text-red-500 text-xs italic">{validationErrors.email}</p>
             )}
-            <label className="text-gray-700 text-sm  mb-2 capitalize">
+            <label className="text-gray-700 text-sm mb-2 capitalize">
               Password
             </label>
             <input
@@ -140,7 +150,7 @@ const Login = () => {
               <p className="text-red-500 text-xs italic">{validationErrors.password}</p>
             )}
           </div>
-          <div className="flex  space-x-8 mb-2">
+          <div className="flex space-x-8 mb-2">
             <div className="flex gap-2">
               <input type="checkbox" className="cursor-pointer" />
               <label>Remember me</label>
@@ -154,24 +164,23 @@ const Login = () => {
           {errorMessage && (
             <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
           )}
-          <div className="flex items-center flex-col ">
-            <button className="bg-sky-700  hover:bg-sky-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+          <div className="flex items-center flex-col">
+            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
               Sign In
             </button>
-            <p> or login with</p>
+            <p>or login with</p>
             <div className="flex gap-6 space-x-4">
               <button
                 onClick={googleAuth}
-                className="flex items-center justify-center gap-2 cursor-pointer bg-slate-100 px-3 py-2 mt-2 text-md font-bold rounded-sm "
+                className="flex items-center justify-center gap-2 cursor-pointer bg-slate-100 px-3 py-2 mt-2 text-md font-bold rounded-sm"
               >
                 <FcGoogle size={25} />
                 Google
               </button>
               <button
-                className="flex items-center justify-center gap-2 cursor-pointer bg-slate-100 px-3 py-2 mt-2 text-md font-bold rounded-sm "
+                className="flex items-center justify-center gap-2 cursor-pointer bg-slate-100 px-3 py-2 mt-2 text-md font-bold rounded-sm"
                 onClick={facebookAuth}
               >
-                {" "}
                 <FaFacebookF size={25} color="#316FF6" />
                 Facebook
               </button>

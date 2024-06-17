@@ -379,17 +379,7 @@ const SignUp = () => {
                 </div>
               </div>
             </div>
-{/* 
-            {uploadProgress > 0 && (
-              <div className="w-full bg-gray-200 rounded-full mt-3">
-                <div
-                  className="bg-blue-600 text-xs leading-none py-1 text-center text-white rounded-full"
-                  style={{ width: `${uploadProgress}%` }}
-                >
-                  {uploadProgress}%
-                </div>
-              </div>
-            )} */}
+
           </div>
           <div className="flex items-center flex-col">
             <button
