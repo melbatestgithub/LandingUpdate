@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
-import { ClipLoader } from "react-spinners";  // Import spinner
+import { ClipLoader } from "react-spinners";  
+
 
 const SignUp = () => {
-  const baseUrl = "https://it-issue-tracking-api.onrender.com/api";
+  const baseUrl = "https://it-issue-tracking-api.onrender.com/api"
   const [userData, setUserData] = useState({
     email: "",
     password: "",
