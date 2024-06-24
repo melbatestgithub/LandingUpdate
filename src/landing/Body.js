@@ -10,7 +10,7 @@ const Body = () => {
   const [expandedFAQ, setExpandedFAQ] = useState(null);
 
   useEffect(() => {
-    fetch('http://it-issue-tracking-api.onrender.com/api/FAQ/getFaq')
+    fetch('https://it-issue-tracking-api.onrender.com/api/FAQ/getFaq')
       .then((response) => response.json())
       .then((data) => setFaqs(data));
   }, []);
