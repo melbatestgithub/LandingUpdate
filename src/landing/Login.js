@@ -53,7 +53,12 @@ const Login = () => {
       dispatch(loginStart());
 
       try {
-        const res = await axios.post(`${baseUrl}/users/login`, loginData);
+        const res = await axios.post(`${baseUrl}/users/login`, loginData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
         const department = res.data.others.department;
         console.log(department);
 
