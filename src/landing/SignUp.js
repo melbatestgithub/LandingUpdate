@@ -7,7 +7,7 @@ import { ClipLoader } from "react-spinners";
 
 
 const SignUp = () => {
-  const baseUrl = "http://it-issue-tracking-api.onrender.com/api"
+  const baseUrl = "https://it-issue-tracking-api.onrender.com/api"
   const [userData, setUserData] = useState({
     email: "",
     password: "",
