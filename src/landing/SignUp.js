@@ -39,11 +39,13 @@ const SignUp = () => {
           },
           withCredentials: false,
         })
-        if (res.data.success) {
-          setDepartments(res.data.departments);
-        } else {
-          console.error('Unable to fetch departments: ', res.data.message);
-        }
+        console.log('API Response:', res.data); // Log the response to inspect its structure
+
+      if (res.data && res.data.departments) {
+        setDepartments(res.data.departments); // Update departments state with correct data
+      } else {
+        console.error('Unexpected response format:', res.data);
+      }
       } catch (error) {
         console.error('Unable to fetch departments:', error);
       }
