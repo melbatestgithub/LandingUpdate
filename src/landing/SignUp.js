@@ -29,20 +29,24 @@ const SignUp = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);  // Add loading state
 
+  
   useEffect(() => {
-    axios.get(`${baseUrl}/department/getAll`,{
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    })
-      .then((response) => {
-        setDepartment(response.data.departments);
-      })
-      .catch((error) => {
-        console.log("something went wrong", error);
-      });
-  }, [baseUrl]);
+    const fetchDepartments = async () => {
+      try {
+        const res = await axios.get('https://it-issue-tracking-api.onrender.com/api/department/getAll', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
+        setDepartments(res.data);
+      } catch (error) {
+        console.error('Unable to fetch departments:', error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
 
   const validateEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
