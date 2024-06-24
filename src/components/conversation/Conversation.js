@@ -4,7 +4,7 @@ import axios from 'axios'
 const Conversation = ({conversation,currentUser}) => {
     const [user,setUser]=useState(null)
 
-    const baseUrl="http://it-issue-tracking-api.onrender.com/api"
+    const baseUrl="https://it-issue-tracking-api.onrender.com/api"
 
     useEffect(()=>{
         const friendId=conversation.members.find((m)=>m!==currentUser._id)
