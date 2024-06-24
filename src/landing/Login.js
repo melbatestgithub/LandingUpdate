@@ -13,7 +13,6 @@ const Login = () => {
     email: "",
     password: "",
   });
-
   // State variables for validation messages and error message
   const [validationErrors, setValidationErrors] = useState({
     email: "",
