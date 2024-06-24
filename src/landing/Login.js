@@ -105,11 +105,11 @@ const Login = () => {
   };
 
   const googleAuth = () => {
-    window.open("http://localhost:5600/auth/google");
+    window.open("http://it-issue-tracking-api.onrender.com/auth/google");
   };
 
   const facebookAuth = () => {
-    window.open("http://localhost:5600/auth/facebook");
+    window.open("http://it-issue-tracking-api.onrender.com/auth/facebook");
   };
 
   return (
