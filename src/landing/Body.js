@@ -11,14 +11,21 @@ const Body = () => {
   const [expandedFAQ, setExpandedFAQ] = useState(null);
 
   useEffect(() => {
-    try {
- 
-     const res= axios.get("https://it-issue-tracking-api.onrender.com/api/FAQ/getFaq")
-      setFaqs(res.data)   
-  } catch (error) {
-    console.log("Unable to Fetch FAQ ",error)
-  }
-        
+    const fetchFAQs = async () => {
+      try {
+        const res = await axios.get("https://it-issue-tracking-api.onrender.com/api/FAQ/getFaq", {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
+        setFaqs(res.data);
+      } catch (error) {
+        console.error("Unable to Fetch FAQ", error);
+      }
+    };
+    
+    fetchFAQs();
   }, []);
 
   const handleToggleFAQ = (index) => {
@@ -36,7 +43,7 @@ const Body = () => {
             Our feature-rich help desk software speeds up ticket resolution with the help of proactive automations and highly customizable workflows.
           </p>
         </div>
-        <img className="max-h-[500px] w-[700px]" src={DeskImg} alt="" />
+        <img className="max-h-[500px] w-[700px]" src={DeskImg} alt="Desk" />
       </div>
       <section>
         <h1 className="text-center p-5 tracking-wider text-3xl font-extrabold text-sky-900 font-sans">
@@ -44,7 +51,7 @@ const Body = () => {
         </h1>
         <div className="flex">
           <div className="border-2 m-5 shadow-2xl">
-            <img className="max-w-[100px] mx-auto p-5" src={caution} alt="" />
+            <img className="max-w-[100px] mx-auto p-5" src={caution} alt="Caution" />
             <p className="text-center text-2xl text-sky-700 font-sans">Incident management</p>
             <hr className="my-2 mx-3" />
             <p className="text-center text-lg px-5 pt-2 pb-10 leading-10 font-sans">
@@ -52,7 +59,7 @@ const Body = () => {
             </p>
           </div>
           <div className="border-2 m-5 shadow-2xl">
-            <img className="max-w-[100px] mx-auto p-5" src={problem} alt="" />
+            <img className="max-w-[100px] mx-auto p-5" src={problem} alt="Problem" />
             <p className="text-center text-2xl text-sky-700 font-sans">Problem management</p>
             <hr className="my-2 mx-3" />
             <p className="text-center text-lg px-5 pt-2 pb-10 leading-10 font-sans">
@@ -60,7 +67,7 @@ const Body = () => {
             </p>
           </div>
           <div className="border-2 m-5 shadow-2xl">
-            <img className="max-w-[100px] mx-auto p-5" src={barChart} alt="" />
+            <img className="max-w-[100px] mx-auto p-5" src={barChart} alt="Bar Chart" />
             <p className="text-center text-2xl text-sky-700 font-sans">Advanced Analytics</p>
             <hr className="my-2 mx-3" />
             <p className="text-center text-lg px-5 pt-2 pb-10 leading-10 font-sans">
@@ -79,7 +86,7 @@ const Body = () => {
                 className="flex space-x-3 cursor-pointer border-2 border-sky-700 text-sky-700 px-[60px] py-3 rounded-lg font-extrabold text-2xl font-sans"
                 onClick={() => handleToggleFAQ(index)}
               >
-                <img className="max-w-[30px] h-[30px]" src={Plus} alt="" />
+                <img className="max-w-[30px] h-[30px]" src={Plus} alt="Plus" />
                 <p>{faq.question}</p>
               </div>
               {expandedFAQ === index && (
