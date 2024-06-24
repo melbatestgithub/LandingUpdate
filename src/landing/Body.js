@@ -4,6 +4,7 @@ import problem from '../assets/problem.png';
 import barChart from '../assets/bar-chart.png';
 import Plus from '../assets/plus.png';
 import caution from '../assets/caution.png';
+import axios from 'axios';
 
 const Body = () => {
   const [faqs, setFaqs] = useState([]);
@@ -11,15 +12,13 @@ const Body = () => {
 
   useEffect(() => {
     try {
-    fetch('https://it-issue-tracking-api.onrender.com/api/FAQ/getFaq')
-    .then((response) => response.json())
-      .then((data) => setFaqs(data));
-    
+ 
+     const res= axios.get("https://it-issue-tracking-api.onrender.com/api/FAQ/getFaq")
+      setFaqs(res.data)   
   } catch (error) {
     console.log("Unable to Fetch FAQ ",error)
   }
-      
-     
+        
   }, []);
 
   const handleToggleFAQ = (index) => {
