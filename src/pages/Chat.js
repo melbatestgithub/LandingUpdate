@@ -18,7 +18,7 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const socket = useRef();
   const scrollRef = useRef();
-   const baseUrl = "http://it-issue-tracking-api.onrender.com/api"
+   const baseUrl = "https://it-issue-tracking-api.onrender.com/api"
 
   useEffect(() => {
     socket.current = io("ws://localhost:5800");
