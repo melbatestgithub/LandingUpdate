@@ -17,7 +17,7 @@ const Body = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          withCredentials: true,
+          withCredentials: false,
         });
         setFaqs(res.data);
       } catch (error) {
