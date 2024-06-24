@@ -38,8 +38,11 @@ const SignUp = () => {
             'Content-Type': 'application/json',
           },
           withCredentials: false,
-        });
-        setDepartment(res.data);
+        });if (Array.isArray(res.data)) {
+          setDepartment(res.data);
+        } else {
+          console.error('Unexpected response format:', res.data);
+        }
       } catch (error) {
         console.error('Unable to fetch departments:', error);
       }
