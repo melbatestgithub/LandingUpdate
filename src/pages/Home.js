@@ -35,7 +35,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const response = await axios.get(`http://it-issue-tracking-api.onrender.com/api/issue/counts/${userId}`);
+        const response = await axios.get(`https://it-issue-tracking-api.onrender.com/api/issue/counts/${userId}`);
         setCounts(response.data);
       } catch (error) {
         console.error('Failed to fetch issue counts:', error);
@@ -44,7 +44,7 @@ const Home = () => {
 
     const fetchLatestIssue = async () => {
       try {
-        const response = await axios.get(`http://it-issue-tracking-api.onrender.com/api/issue/latest/${userId}`);
+        const response = await axios.get(`https://it-issue-tracking-api.onrender.com/api/issue/latest/${userId}`);
         if (response.data) {
           setLatestIssue(response.data);
         } else {
