@@ -21,7 +21,7 @@ const Chat = () => {
    const baseUrl = "https://it-issue-tracking-api.onrender.com/api"
 
   useEffect(() => {
-    socket.current = io("ws://localhost:5800");
+    socket.current = io("wss://socket-server-real-time-chat.onrender.com");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
