@@ -16,7 +16,7 @@ const Notification = () => {
     getAssignedIssue();
   }, []);
 
-  const baseUrl = "http://localhost:5600/api";
+  const baseUrl = "http://it-issue-tracking-api.onrender.com/api";
 
   const getAssignedIssue = async () => {
     try {

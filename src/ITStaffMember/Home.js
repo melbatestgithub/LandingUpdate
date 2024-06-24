@@ -15,7 +15,7 @@ const Home = ({ darkMode }) => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const response = await axios.get(`http://localhost:5600/api/issue/count?email=${email}`);
+        const response = await axios.get(`http://it-issue-tracking-api.onrender.com/api/issue/count?email=${email}`);
         setCounts(response.data);
       } catch (error) {
         console.error('Error fetching counts', error);

@@ -8,7 +8,6 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import axios from 'axios';
 import './home.css';  
 import { Link } from 'react-router-dom';
-
 const Home = () => {
   const emptyIssue=()=>{
   return(
@@ -36,7 +35,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const response = await axios.get(`http://localhost:5600/api/issue/counts/${userId}`);
+        const response = await axios.get(`http://it-issue-tracking-api.onrender.com/api/issue/counts/${userId}`);
         setCounts(response.data);
       } catch (error) {
         console.error('Failed to fetch issue counts:', error);
@@ -45,7 +44,7 @@ const Home = () => {
 
     const fetchLatestIssue = async () => {
       try {
-        const response = await axios.get(`http://localhost:5600/api/issue/latest/${userId}`);
+        const response = await axios.get(`http://it-issue-tracking-api.onrender.com/api/issue/latest/${userId}`);
         if (response.data) {
           setLatestIssue(response.data);
         } else {
