@@ -39,7 +39,7 @@ const SignUp = () => {
           },
           withCredentials: true,
         });
-        setDepartments(res.data);
+        setDepartment(res.data);
       } catch (error) {
         console.error('Unable to fetch departments:', error);
       }
