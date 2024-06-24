@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaDownload } from "react-icons/fa";
 const History = () => {
-  const baseUrl = "http://localhost:5600/api";
+   const baseUrl = "http://it-issue-tracking-api.onrender.com/api"
   const [historyData, setHistoryData] = useState([]);
 
   useEffect(() => {
