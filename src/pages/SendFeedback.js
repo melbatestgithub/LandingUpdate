@@ -11,7 +11,7 @@ const SendFeedback = () => {
     email: "",
     message: "",
   });
-  const baseUrl = "http://it-issue-tracking-api.onrender.com/api";
+  const baseUrl = "https://it-issue-tracking-api.onrender.com/api";
 
   const [errors, setErrors] = useState({
     employeeFullName: "",
