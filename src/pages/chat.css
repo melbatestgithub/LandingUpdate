@@ -53,3 +53,9 @@ box-shadow: 0 0 4px;
 padding: 2rem;
 position: relative;
 }
+
+.conversation.active {
+    background-color: #8e8585; /* Example background color for active conversation */
+    font-weight: bold;
+     /* Example styling for active conversation */
+  }

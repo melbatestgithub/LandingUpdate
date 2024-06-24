@@ -14,7 +14,6 @@ const SubmitIssue = () => {
     department: "",
     description: "",
     roomNumber: "",
-    date: "",
   });
   const [successMessage, setSuccessMessage] = useState(""); // State to store the success message
   const [errors, setErrors] = useState({
@@ -76,8 +75,8 @@ const SubmitIssue = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const { title, category, department, description, roomNumber, date } = issueDetail;
-      if (!title || !category || !department || !description || !roomNumber || !date) {
+      const { title, category, department, description, roomNumber } = issueDetail;
+      if (!title || !category || !department || !description || !roomNumber ) {
         throw new Error("Please fill in all required fields.");
       }
 
@@ -104,7 +103,6 @@ const SubmitIssue = () => {
         department: "",
         description: "",
         roomNumber: "",
-        date: "",
       });
       setSelectedDate(null);
     } catch (error) {
@@ -167,16 +165,6 @@ const SubmitIssue = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
             />
             {errors.roomNumber && <p className="text-red-500">{errors.roomNumber}</p>}
-            <div className="flex flex-col" style={{ width: "40%" }}>
-              <label>Select Date</label>
-              <DatePicker
-                dateFormat="dd/MM/yyyy"
-                selected={selectedDate}
-                isClearable
-                onChange={handleDateChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-              />
-            </div>
             <div className="flex flex-col">
               <label className="my-3 font-semibold">Description</label>
               <textarea

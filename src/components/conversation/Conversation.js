@@ -13,8 +13,7 @@ const Conversation = ({conversation,currentUser}) => {
         try {
             const res=await axios.get(`${baseUrl}/users/allUsers?userId=`+friendId)
             setUser(res.data)
-        } catch (error) {
-            
+        } catch (error) {     
         }
      }
      getUser()
@@ -25,12 +24,10 @@ const Conversation = ({conversation,currentUser}) => {
         <div className='imgContainer'>
         <img
         className='conversationImg'
-        src={user?.profileImg||"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+        src={user?.profileImg||"https://i.pinimg.com/564x/8a/9d/6e/8a9d6e85a93b8b3a8002896da71882a3.jpg"}
         />
         </div>  
-      
         <span className='conversationName'>{user?.firstName}</span>
-      
     </div>
   )
 }

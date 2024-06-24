@@ -4,15 +4,20 @@ import { CiLight } from "react-icons/ci";
 import { Link, useLocation } from "react-router-dom";
 import { CiDark } from "react-icons/ci";
 import { CiChat1 } from "react-icons/ci";
+import {logout} from '../../redux/userSlice'
 import { io } from "socket.io-client";
+import {useDispatch} from 'react-redux'
+import { useNavigate } from "react-router-dom";
 import MOE from "../../assets/MOE.png";
-import "./Navbar.css";
+import "./Navbar.css";  
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const socket = useRef();
   const location = useLocation();
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -54,12 +59,19 @@ const Navbar = () => {
     }
   }, [location.pathname]);
 
+
+  const handleLogout=()=>{
+    dispatch(logout())
+    navigate("/login")
+    
+  }
+
   return (
     <div className="bg-gray-100 p-4 fixed top-0 left-0 z-10 mt-0 w-full shadow-xl font-sans">
       <div className="flex justify-between items-center">
         <div className="flex gap-5 px-3 items-center">
         <img className="max-w-[60px]" src={MOE} alt=""/>
-          <p className="text-black text-xl font-bold">{fullName}</p>
+          <p className="text-black text-xl font-bold welcome-message">{fullName}</p>
         </div>
         <div className="flex items-center space-x-6">
           {/* Hamburger menu icon */}
@@ -102,7 +114,7 @@ const Navbar = () => {
                 )}
               </Link>
             </div>
-            <button className="cursor-pointer bg-sky-700 text-white px-3 py-2 rounded-lg font-bold">
+            <button className="cursor-pointer bg-sky-700 text-white px-3 py-2 rounded-lg font-bold" onClick={handleLogout}>
              Logout
             </button>
             <div>

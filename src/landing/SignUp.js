@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase";
+import { ClipLoader } from "react-spinners";  // Import spinner
 
 const SignUp = () => {
   const baseUrl = "http://localhost:5600/api";
@@ -13,7 +13,6 @@ const SignUp = () => {
     confirmPassword: "",
     firstName: "",
     lastName: "",
-    // profile: "",
     phoneNumber: "",
     department: "",
     address: "",
@@ -27,6 +26,7 @@ const SignUp = () => {
   const [selectGender, setSelectGender] = useState("");
   const [department, setDepartment] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);  // Add loading state
 
   useEffect(() => {
     fetch(`${baseUrl}/department/getAll`)
@@ -55,13 +55,18 @@ const SignUp = () => {
     return /^\d+$/.test(input);
   };
 
-  const validateField = (name, value) => {
+  const validateField = async (name, value) => {
     let errorMsg = "";
 
     switch (name) {
       case "email":
         if (!validateEmail(value)) {
           errorMsg = "Invalid email format";
+        } else {
+          const emailExists = await checkEmailExists(value);
+          if (emailExists) {
+            errorMsg = "Email already registered";
+          }
         }
         break;
       case "password":
@@ -104,21 +109,29 @@ const SignUp = () => {
     }));
   };
 
-  const handleChange = (e) => {
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.get(`${baseUrl}/users/checkEmail`, {
+        params: { email },
+      });
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error checking email", error);
+      return false;
+    }
+  };
+
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
-    validateField(name, value);
+    await validateField(name, value);
   };
 
   const handleChangeGender = (e) => {
     setSelectGender(e.target.value);
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    console.log(file);
-  };
+
 
   const startUpload = (file) => {
     return new Promise((resolve, reject) => {
@@ -149,12 +162,15 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);  // Set loading state to true
+
     // Check if password and confirmPassword match
     if (userData.password !== userData.confirmPassword) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         confirmPassword: "Passwords do not match",
       }));
+      setIsLoading(false);  // Set loading state to false if error
       return;
     }
 
@@ -176,14 +192,17 @@ const SignUp = () => {
         }
 
         await axios.post(`${baseUrl}/users/register`, userDataWithGender);
+        setIsLoading(false);  // Set loading state to false before navigation
         setTimeout(() => {
           window.location.href = "/login";
-        }, 15000);
+        }, 2000);
       } catch (error) {
         console.log("Unable to fetch user data", error);
+        setIsLoading(false);  // Set loading state to false if error
       }
     } else {
       console.log("Form is invalid, please correct the errors and try again.");
+      setIsLoading(false);  // Set loading state to false if invalid
     }
   };
 
@@ -304,17 +323,19 @@ const SignUp = () => {
                   Department
                 </label>
                 <select
-                  name="department"
-                  value={userData.department}
-                  onChange={handleChange}
-                  className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  {department.map((dept) => (
-                    <option key={dept._id} value={dept.name}>
-                      {dept.name}
-                    </option>
-                  ))}
-                </select>
+  name="department"
+  value={userData.department}
+  onChange={handleChange}
+  className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+>
+  <option value="" disabled hidden>Select Department</option>
+  {department.map((dept) => (
+    <option key={dept._id} value={dept.name}>
+      {dept.name}
+    </option>
+  ))}
+</select>
+
               </div>
             </div>
 
@@ -335,22 +356,21 @@ const SignUp = () => {
               <div className="flex flex-col">
                 <label>Employment Type</label>
                 <select
-                  name="employmentType"
-                  onChange={handleChange}
-                  value={userData.employmentType}
-                  className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  <option>Full time</option>
-                  <option>Regular</option>
-                  <option>Part time</option>
-                </select>
+  name="employmentType"
+  onChange={handleChange}
+  value={userData.employmentType}
+  className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+>
+  <option value="" disabled selected hidden>Select Employment type</option>
+  <option value="Full time">Full time</option>
+  <option value="Regular">Regular</option>
+  <option value="Part time">Part time</option>
+</select>
+
               </div>
             </div>
 
             <div className="flex space-x-6 justify-center items-center">
-              <label htmlFor="upload">
-            
-              </label>
               <div>
                 <p>Gender</p>
                 <div className="flex justify-center items-center gap-3">
@@ -379,15 +399,18 @@ const SignUp = () => {
                 </div>
               </div>
             </div>
-
           </div>
           <div className="flex items-center flex-col">
-            <button
-              className="bg-sky-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-              type="submit"
-            >
-              SignUp
-            </button>
+            {isLoading ? (
+              <ClipLoader size={35} color={"#123abc"} loading={isLoading} />
+            ) : (
+              <button
+                className="bg-sky-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                type="submit"
+              >
+                SignUp
+              </button>
+            )}
             <div className="mt-2">
               <p>
                 Already have an account?{" "}

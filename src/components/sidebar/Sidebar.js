@@ -31,7 +31,7 @@ const Sidebar = () => {
   <NavLink to="/dashboard/checkIssueStatus" icon={<CiBookmarkCheck size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Issue Status</span>} />
   <NavLink to="/dashboard/profile" icon={<IoIosSettings size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Accounts</span>} />
   <NavLink to="/dashboard/feedback" icon={<MdFeedback size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Feedback</span>} />
-  <NavLink to="/dashboard/chatPage" icon={<FaRocketchat size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Message</span>} />
+  <NavLink to="/dashboard/chatPage" icon={<FaRocketchat size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Internal Messaging</span>} />
   <NavLink to="/dashboard/history" icon={<MdHistory size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">History</span>} />
   <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
     <LuLogOut size={26} className="text-gray-400"/>

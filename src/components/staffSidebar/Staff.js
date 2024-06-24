@@ -25,8 +25,8 @@ const Sidebar = () => {
 <ul className="flex flex-col gap-3">
   <NavLink to="/ItStaffMembers" icon={<TiHome size={26} className="text-gray-400 "/>} text={<span className="text-gray-400 font-normal text-lg">Home</span>} />
   <NavLink to="/ItStaffMembers/notification" icon={<CiBookmarkCheck size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Assigned Issues</span>} />
-  <NavLink to="/ItStaffMembers/profile" icon={<IoIosSettings size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Accounts</span>} />
-  <NavLink to="/ItStaffMembers/chatPage" icon={<FaRocketchat size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Chat page</span>} />
+  <NavLink to="/ItStaffMembers/profile" icon={<IoIosSettings size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Manage profile</span>} />
+  <NavLink to="/ItStaffMembers/chatPage" icon={<FaRocketchat size={26} className="text-gray-400"/>} text={<span className="text-gray-400 font-normal text-lg">Internal Messaging</span>} />
  
   <li className="flex p-2 items-center hover:bg-slate-800 hover:text-white cursor-pointer" onClick={handleLogout}>
     <LuLogOut size={26} className="text-gray-400"/>

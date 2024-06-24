@@ -164,14 +164,15 @@ const Chat = () => {
           </button>
         </div>
         {conversations.map((c) => (
-          <div
-            key={c._id}
-            onClick={() => setCurrentChat(c)}
-            className={`conversation ${currentChat?._id === c._id ? "active" : ""}`}
-          >
-            <Conversation conversation={c} currentUser={user} />
-          </div>
-        ))}
+  <div
+    key={c._id}
+    onClick={() => setCurrentChat(c)}
+    className={`conversation ${currentChat?._id === c._id ? "active" : ""}`}
+  >
+    <Conversation conversation={c} currentUser={user} />
+  </div>
+))}
+
       </div>
       <div className="chatBox w-full h-screen">
         <div className="chatBox-wrapper">
@@ -213,7 +214,7 @@ const Chat = () => {
               <option value="" disabled>Select Receiver</option>
               {users.map((user) => (
                 <option key={user._id} value={user._id}>
-                  {user.firstName}
+                 {user.firstName} ({user.department})
                 </option>
               ))}
             </select>
