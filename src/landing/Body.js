@@ -13,7 +13,7 @@ const Body = () => {
   useEffect(() => {
     const fetchFAQs = async () => {
       try {
-        const res = await axios.get("http://it-issue-tracking-api.onrender.com/api/FAQ/getFaq", {
+        const res = await axios.get("https://it-issue-tracking-api.onrender.com/api/FAQ/getFaq", {
           headers: {
             'Content-Type': 'application/json',
           },
