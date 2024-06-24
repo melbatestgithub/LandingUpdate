@@ -25,7 +25,7 @@ const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectGender, setSelectGender] = useState("");
-  const [department, setDepartment] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);  // Add loading state
 
@@ -38,10 +38,11 @@ const SignUp = () => {
             'Content-Type': 'application/json',
           },
           withCredentials: false,
-        });if (Array.isArray(res.data)) {
-          setDepartment(res.data);
+        })
+        if (res.data.success) {
+          setDepartments(res.data.departments);
         } else {
-          console.error('Unexpected response format:', res.data);
+          console.error('Unable to fetch departments: ', res.data.message);
         }
       } catch (error) {
         console.error('Unable to fetch departments:', error);
@@ -341,7 +342,7 @@ const SignUp = () => {
   className="shadow border py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 >
   <option value="" disabled hidden>Select Department</option>
-  {department.map((dept) => (
+  {departments.map((dept) => (
     <option key={dept._id} value={dept.name}>
       {dept.name}
     </option>
