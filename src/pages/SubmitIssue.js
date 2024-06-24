@@ -6,7 +6,7 @@ import { FaTimes } from "react-icons/fa"; // Import close icon from react-icons 
 import { Link } from "react-router-dom";
 
 const SubmitIssue = () => {
-  const baseUrl = "http://it-issue-tracking-api.onrender.com/api";
+  const baseUrl = "https://it-issue-tracking-api.onrender.com/api";
   const [selectedDate, setSelectedDate] = useState(null);
   const [issueDetail, setIssueDetail] = useState({
     title: "",
