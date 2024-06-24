@@ -15,8 +15,7 @@ const CheckIssueStatus = () => {
       setIssueDetails(null);
       return;
     }
-
-    const baseUrl = "http://localhost:5600/api";
+ const baseUrl = "http://it-issue-tracking-api.onrender.com/api"
     try {
       const res = await axios.get(`${baseUrl}/issue/singleIssue/${issueId}`);
       if (res.data.success) {
