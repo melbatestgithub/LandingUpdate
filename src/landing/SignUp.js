@@ -30,7 +30,12 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);  // Add loading state
 
   useEffect(() => {
-    axios.get(`${baseUrl}/department/getAll`)
+    axios.get(`${baseUrl}/department/getAll`,{
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    })
       .then((response) => {
         setDepartment(response.data.departments);
       })
