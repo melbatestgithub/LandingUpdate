@@ -29,15 +29,14 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);  // Add loading state
 
   useEffect(() => {
-    fetch(`${baseUrl}/department/getAll`)
-      .then((response) => response.json())
-      .then((data) => {
-        setDepartment(data.departments);
+    axios.get(`${baseUrl}/department/getAll`)
+      .then((response) => {
+        setDepartment(response.data.departments);
       })
       .catch((error) => {
         console.log("something went wrong", error);
       });
-  }, []);
+  }, [baseUrl]);
 
   const validateEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
