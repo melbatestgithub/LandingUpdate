@@ -172,22 +172,7 @@ const Login = () => {
             <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
               Sign In
             </button>
-            <p>or login with</p>
-            <div className="flex gap-6 space-x-4">
-              <button
-                onClick={googleAuth}
-                className="flex items-center justify-center gap-2 cursor-pointer bg-slate-100 px-3 py-2 mt-2 text-md font-bold rounded-sm"
-              >
-                <FcGoogle size={25} />
-                Google
-              </button>
-              <button
-                className="flex items-center justify-center gap-2 cursor-pointer bg-slate-100 px-3 py-2 mt-2 text-md font-bold rounded-sm"
-                onClick={facebookAuth}
-              >
-                <FaFacebookF size={25} color="#316FF6" />
-                Facebook
-              </button>
+           
             </div>
             <div className="mt-2">
               <p>
