@@ -13,19 +13,17 @@ const Login = () => {
     email: "",
     password: "",
   });
-  // State variables for validation messages and error message
   const [validationErrors, setValidationErrors] = useState({
     email: "",
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
- const baseUrl = "https://it-issue-tracking-api.onrender.com/api"
+  const baseUrl = "https://it-issue-tracking-api.onrender.com/api";
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
 
-    // Validate inputs
     if (e.target.name === "email") {
       setValidationErrors({
         ...validationErrors,
@@ -41,14 +39,12 @@ const Login = () => {
   };
 
   const validateEmail = (email) => {
-    // Basic email validation regex
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if form is valid before submitting
     if (validateForm()) {
       dispatch(loginStart());
 
@@ -66,11 +62,11 @@ const Login = () => {
         if (isITStaff) {
           setTimeout(() => {
             window.location.href = "/ItStaffMembers";
-          }, 0); // Redirect immediately
+          }, 0);
         } else {
           setTimeout(() => {
             window.location.href = "/dashboard";
-          }, 0); // Redirect immediately
+          }, 0);
         }
 
         dispatch(loginSuccess(res.data));
@@ -82,22 +78,19 @@ const Login = () => {
         } else {
           setErrorMessage("Incorrect Email or password");
         }
-        // Clear the error message after a few seconds
         setTimeout(() => {
           setErrorMessage("");
-        }, 5000); // Clear error message after 5 seconds
+        }, 5000);
       }
     } else {
       setErrorMessage("An error occurred, All input fields are required");
-      // Clear the error message after a few seconds
       setTimeout(() => {
         setErrorMessage("");
-      }, 5000); // Clear error message after 5 seconds
+      }, 5000);
     }
   };
 
   const validateForm = () => {
-    // Validate all fields
     const emailValid = validateEmail(loginData.email);
     const passwordValid = loginData.password.length >= 6;
 
@@ -172,18 +165,16 @@ const Login = () => {
             <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
               Sign In
             </button>
-           
-            </div>
-            <div className="mt-2">
-              <p>
-                Don't have an account?{" "}
-                <Link to="/register">
-                  <span className="text-lg text-slate-500 cursor-pointer">
-                    Create Account
-                  </span>
-                </Link>{" "}
-              </p>
-            </div>
+          </div>
+          <div className="mt-2">
+            <p>
+              Don't have an account?{" "}
+              <Link to="/register">
+                <span className="text-lg text-slate-500 cursor-pointer">
+                  Create Account
+                </span>
+              </Link>{" "}
+            </p>
           </div>
         </form>
       </div>
